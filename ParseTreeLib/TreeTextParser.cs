@@ -12,6 +12,7 @@ namespace bkh.ParseTreeLib
     {
         private const string _beginMarker = "*** ";
         private const string _endMarker = "****";
+        private const string _ruleAppliedMarker = "***** Rule applied: ";
 
         private static char[] _operatorSeparatorChars = new char[] { ' ', '(' };
 
@@ -36,6 +37,7 @@ namespace bkh.ParseTreeLib
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (line.StartsWith(_endMarker) &&
+                        line.StartsWith(_ruleAppliedMarker) == false &&
                         tree != null)
                     {
                         // End of current tree reached.
@@ -43,11 +45,13 @@ namespace bkh.ParseTreeLib
                         tree.EndOffset = 0;
                         tree.InnerTreeText = sb.ToString();
                     }
-                    else if (line.StartsWith(_beginMarker))
+                    else if (line.StartsWith(_beginMarker) ||
+                        line.StartsWith(_ruleAppliedMarker))
                     {
                         if (tree != null)
                         {
                             tree.RootNode = ConvertNodeListToTree(nodes);
+                            tree.InnerTreeText = sb.ToString();
                             trees.Add(tree);
                             nodes = new List<SqlParseTreeNode>();
                             sb = new StringBuilder();
@@ -98,6 +102,10 @@ namespace bkh.ParseTreeLib
 
         private static string ExtractTreeDescription(string parseLine)
         {
+            if (parseLine.StartsWith(_ruleAppliedMarker))
+            {
+                return parseLine.Substring(_ruleAppliedMarker.Length).Trim();
+            }
             return parseLine.Trim('*').Trim(' ').TrimEnd(':');
         }
 
@@ -107,7 +115,8 @@ namespace bkh.ParseTreeLib
 
             // Determine level by how many tabs prefix the text.
             int spaces = CountLeadingSpaces(parseLine);
-            node.Level = spaces / 4;
+            //node.Level = spaces / 4;
+            node.Level = spaces;
 
             // Determine the operation name
             parseLine = parseLine.TrimStart();
