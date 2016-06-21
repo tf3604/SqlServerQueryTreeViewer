@@ -37,8 +37,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewerForm));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabScript = new System.Windows.Forms.TabPage();
-            this.closeButton = new System.Windows.Forms.Button();
-            this.executeButton = new System.Windows.Forms.Button();
             this.queryRichTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,9 +52,13 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.connectButton = new System.Windows.Forms.ToolStripButton();
+            this.executeButton = new System.Windows.Forms.ToolStripButton();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -65,46 +67,22 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTabControl.Controls.Add(this.tabScript);
-            this.mainTabControl.Location = new System.Drawing.Point(0, 27);
+            this.mainTabControl.Location = new System.Drawing.Point(0, 52);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(1124, 521);
+            this.mainTabControl.Size = new System.Drawing.Size(1124, 496);
             this.mainTabControl.TabIndex = 0;
             // 
             // tabScript
             // 
-            this.tabScript.Controls.Add(this.closeButton);
-            this.tabScript.Controls.Add(this.executeButton);
             this.tabScript.Controls.Add(this.queryRichTextBox);
             this.tabScript.Location = new System.Drawing.Point(4, 22);
             this.tabScript.Name = "tabScript";
             this.tabScript.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScript.Size = new System.Drawing.Size(1116, 495);
+            this.tabScript.Size = new System.Drawing.Size(1116, 470);
             this.tabScript.TabIndex = 0;
             this.tabScript.Text = "Script";
             this.tabScript.UseVisualStyleBackColor = true;
-            // 
-            // closeButton
-            // 
-            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.Location = new System.Drawing.Point(1031, 466);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(75, 23);
-            this.closeButton.TabIndex = 2;
-            this.closeButton.Text = "Close";
-            this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
-            // 
-            // executeButton
-            // 
-            this.executeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.executeButton.Location = new System.Drawing.Point(9, 466);
-            this.executeButton.Name = "executeButton";
-            this.executeButton.Size = new System.Drawing.Size(75, 23);
-            this.executeButton.TabIndex = 1;
-            this.executeButton.Text = "Execute";
-            this.executeButton.UseVisualStyleBackColor = true;
-            this.executeButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
             // queryRichTextBox
             // 
@@ -114,7 +92,7 @@
             this.queryRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.queryRichTextBox.Location = new System.Drawing.Point(0, 0);
             this.queryRichTextBox.Name = "queryRichTextBox";
-            this.queryRichTextBox.Size = new System.Drawing.Size(1116, 460);
+            this.queryRichTextBox.Size = new System.Drawing.Size(1116, 470);
             this.queryRichTextBox.TabIndex = 0;
             this.queryRichTextBox.Text = "";
             this.queryRichTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryRichTextBox_KeyDown);
@@ -232,11 +210,43 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectButton,
+            this.executeButton});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1122, 25);
+            this.toolStrip1.TabIndex = 2;
+            this.toolStrip1.Text = "primaryToolStrip";
+            // 
+            // connectButton
+            // 
+            this.connectButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.connectButton.Image = ((System.Drawing.Image)(resources.GetObject("connectButton.Image")));
+            this.connectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(56, 22);
+            this.connectButton.Text = "Connect";
+            this.connectButton.Click += new System.EventHandler(this.ConnectButton_Click);
+            // 
+            // executeButton
+            // 
+            this.executeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.executeButton.Image = ((System.Drawing.Image)(resources.GetObject("executeButton.Image")));
+            this.executeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.executeButton.Name = "executeButton";
+            this.executeButton.Size = new System.Drawing.Size(51, 22);
+            this.executeButton.Text = "Execute";
+            this.executeButton.Click += new System.EventHandler(this.ExecuteButton_Click);
+            // 
             // ViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1122, 546);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -248,6 +258,8 @@
             this.tabScript.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,8 +269,6 @@
 
         private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage tabScript;
-        private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.Button executeButton;
         private System.Windows.Forms.RichTextBox queryRichTextBox;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -274,6 +284,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recentQueriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton connectButton;
+        private System.Windows.Forms.ToolStripButton executeButton;
     }
 }
 

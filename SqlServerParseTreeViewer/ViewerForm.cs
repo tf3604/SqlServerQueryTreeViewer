@@ -28,11 +28,7 @@ namespace SqlServerParseTreeViewer
         public ViewerForm()
         {
             InitializeComponent();
-        }
-
-        private void CloseButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            tabScript.Enter += TabScript_Enter;
         }
 
         public TabPage DrawTree(SqlParseTree tree)
@@ -387,6 +383,11 @@ namespace SqlServerParseTreeViewer
         }
 
         private void ConnectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConnectDatabase();
+        }
+
+        private void ConnectButton_Click(object sender, EventArgs e)
         {
             ConnectDatabase();
         }
@@ -806,5 +807,11 @@ namespace SqlServerParseTreeViewer
                 }
             }
         }
+
+        private void TabScript_Enter(object sender, EventArgs e)
+        {
+            ActiveControl = queryRichTextBox;
+        }
+
     }
 }
