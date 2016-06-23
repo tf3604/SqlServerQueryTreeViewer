@@ -39,7 +39,7 @@ namespace SqlServerParseTreeViewer
             subTab.Left = 0;
             subTab.Top = 0;
             subTab.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            
+
             tab.Controls.Add(subTab);
             tab.Size = mainTabControl.Size;
             subTab.Size = tab.Size;
@@ -100,6 +100,11 @@ namespace SqlServerParseTreeViewer
                     }
                 }
                 tabsToDelete.ForEach(t => mainTabControl.TabPages.Remove(t));
+
+                if (ViewerSettings.Instance.TraceFlagListHasBeenEdited)
+                {
+                    SetTraceFlags();
+                }
 
                 if (ViewerSettings.Instance.TrackOptimizerInfo)
                 {
@@ -400,6 +405,7 @@ namespace SqlServerParseTreeViewer
                 if (result == DialogResult.OK)
                 {
                     _connection = connectForm.SqlConnection;
+                    SetTraceFlags();
                     return true;
                 }
             }
@@ -822,6 +828,61 @@ namespace SqlServerParseTreeViewer
                 Image image = treeTab.DrawingSurface.Image;
                 ShowThumbnailForm thumbnailForm = new ShowThumbnailForm(image);
                 thumbnailForm.ShowDialog();
+            }
+        }
+
+        private void SetTraceFlags()
+        {
+            string sql = @"dbcc tracestatus();";
+
+            using (DataTable table = new DataTable())
+            {
+                using (SqlCommand command = new SqlCommand(sql, _connection))
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(table);
+                    }
+                }
+
+                List<int> discoveredTraceFlags = new List<int>();
+                foreach (DataRow row in table.Rows)
+                {
+                    int traceFlagNumber = (int)(short)row["TraceFlag"];
+                    bool enabledForSession = (short)row["Session"] != 0;
+
+                    discoveredTraceFlags.Add(traceFlagNumber);
+                    TraceFlag traceFlag = ViewerSettings.Instance.TraceFlags.FirstOrDefault(tf => tf.TraceFlagNumber == traceFlagNumber);
+                    if (traceFlag != null)
+                    {
+                        if (traceFlag.Enabled != enabledForSession)
+                        {
+                            ToggleTraceFlag(traceFlagNumber, traceFlag.Enabled);
+                        }
+                    }
+                }
+
+                // Handle trace flags that are enabled in options but not returned by dbcc tracestatus
+                List<TraceFlag> traceFlags = ViewerSettings.Instance.TraceFlags.Where(tf => tf.Enabled && discoveredTraceFlags.Contains(tf.TraceFlagNumber) == false).ToList();
+                traceFlags.ForEach(tf => ToggleTraceFlag(tf.TraceFlagNumber, true));
+            }
+        }
+
+        private void ToggleTraceFlag(int traceFlagNumber, bool enable)
+        {
+            string sql;
+            if (enable)
+            {
+                sql = string.Format("dbcc traceon({0});", traceFlagNumber);
+            }
+            else
+            {
+                sql = string.Format("dbcc traceoff({0});", traceFlagNumber);
+            }
+
+            using (SqlCommand command = new SqlCommand(sql, _connection))
+            {
+                command.ExecuteNonQuery();
             }
         }
     }

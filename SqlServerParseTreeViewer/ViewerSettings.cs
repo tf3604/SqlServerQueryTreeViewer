@@ -96,6 +96,19 @@ namespace SqlServerParseTreeViewer
             set;
         }
 
+        [DataMember]
+        public List<TraceFlag> TraceFlags
+        {
+            get;
+            set;
+        }
+
+        public bool TraceFlagListHasBeenEdited
+        {
+            get;
+            set;
+        }
+
         public ReadOnlyCollection<string> MostRecentSqlServers
         {
             get

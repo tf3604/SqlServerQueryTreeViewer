@@ -122,6 +122,13 @@
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SubmittedQueryInfo.cs" />
+    <Compile Include="TraceFlag.cs" />
+    <Compile Include="TraceFlagUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TraceFlagUserControl.Designer.cs">
+      <DependentUpon>TraceFlagUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransformationStatsTracker.cs" />
     <Compile Include="TreeVisualizer.cs" />
     <Compile Include="ViewerForm.cs">
@@ -159,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ShowThumbnailForm.resx">
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TraceFlagUserControl.resx">
+      <DependentUpon>TraceFlagUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewerForm.resx">
       <DependentUpon>ViewerForm.cs</DependentUpon>

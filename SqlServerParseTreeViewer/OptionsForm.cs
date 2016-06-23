@@ -24,6 +24,7 @@ namespace SqlServerParseTreeViewer
             List<OptionsPage> pages = new List<OptionsPage>()
             {
                 new OptionsPage("Counters", new InfoTrackerUserControl()),
+                new OptionsPage("Trace Flags", new TraceFlagUserControl()),
                 new OptionsPage("Operator Colors", new OperatorColorsUserControl())
             };
 
