@@ -55,6 +55,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.executeButton = new System.Windows.Forms.ToolStripButton();
+            this.showThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -183,7 +184,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.showThumbnailToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
@@ -191,7 +193,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
@@ -241,6 +243,13 @@
             this.executeButton.Text = "Execute";
             this.executeButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
+            // showThumbnailToolStripMenuItem
+            // 
+            this.showThumbnailToolStripMenuItem.Name = "showThumbnailToolStripMenuItem";
+            this.showThumbnailToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.showThumbnailToolStripMenuItem.Text = "Show &Thumbnail ...";
+            this.showThumbnailToolStripMenuItem.Click += new System.EventHandler(this.showThumbnailToolStripMenuItem_Click);
+            // 
             // ViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,6 +296,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton connectButton;
         private System.Windows.Forms.ToolStripButton executeButton;
+        private System.Windows.Forms.ToolStripMenuItem showThumbnailToolStripMenuItem;
     }
 }
 

@@ -813,5 +813,16 @@ namespace SqlServerParseTreeViewer
             ActiveControl = queryRichTextBox;
         }
 
+        private void showThumbnailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TabPage currentTab = mainTabControl.SelectedTab;
+            ParseTreeTab treeTab = FindFirstControlOfType<ParseTreeTab>(currentTab.Controls);
+            if (treeTab != null)
+            {
+                Image image = treeTab.DrawingSurface.Image;
+                ShowThumbnailForm thumbnailForm = new ShowThumbnailForm(image);
+                thumbnailForm.ShowDialog();
+            }
+        }
     }
 }

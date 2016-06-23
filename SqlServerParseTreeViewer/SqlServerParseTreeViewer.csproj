@@ -115,6 +115,12 @@
     <Compile Include="RecentQueriesForm.Designer.cs">
       <DependentUpon>RecentQueriesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShowThumbnailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowThumbnailForm.Designer.cs">
+      <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SubmittedQueryInfo.cs" />
     <Compile Include="TransformationStatsTracker.cs" />
     <Compile Include="TreeVisualizer.cs" />
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RecentQueriesForm.resx">
       <DependentUpon>RecentQueriesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowThumbnailForm.resx">
+      <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewerForm.resx">
       <DependentUpon>ViewerForm.cs</DependentUpon>
