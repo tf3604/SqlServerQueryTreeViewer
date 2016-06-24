@@ -248,7 +248,7 @@
             this.showThumbnailToolStripMenuItem.Name = "showThumbnailToolStripMenuItem";
             this.showThumbnailToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.showThumbnailToolStripMenuItem.Text = "Show &Thumbnail ...";
-            this.showThumbnailToolStripMenuItem.Click += new System.EventHandler(this.showThumbnailToolStripMenuItem_Click);
+            this.showThumbnailToolStripMenuItem.Click += new System.EventHandler(this.ShowThumbnailToolStripMenuItem_Click);
             // 
             // ViewerForm
             // 
