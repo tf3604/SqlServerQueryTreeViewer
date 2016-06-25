@@ -88,6 +88,7 @@ namespace SqlServerParseTreeViewer
                 }
 
                 ViewerSettings.Instance.CurrentQuery = queryRichTextBox.Text;
+                ViewerSettings.Instance.CurrentQueryRtf = queryRichTextBox.Rtf;
                 ViewerSettings.Instance.Save();
 
                 // Clear all but the script tab
@@ -622,13 +623,21 @@ namespace SqlServerParseTreeViewer
                 }
             }
 
-            queryRichTextBox.Text = ViewerSettings.Instance.CurrentQuery ?? string.Empty;
+            if (ViewerSettings.Instance.CurrentQueryRtf != null)
+            {
+                queryRichTextBox.Rtf = ViewerSettings.Instance.CurrentQueryRtf;
+            }
+            else
+            {
+                queryRichTextBox.Text = ViewerSettings.Instance.CurrentQuery ?? string.Empty;
+            }
         }
 
         private void ViewerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ViewerSettings.Instance.AddRecentQuery(ViewerSettings.Instance.CurrentQuery);
+            ViewerSettings.Instance.AddRecentQuery(ViewerSettings.Instance.CurrentQuery, ViewerSettings.Instance.CurrentQueryRtf);
             ViewerSettings.Instance.CurrentQuery = queryRichTextBox.Text;
+            ViewerSettings.Instance.CurrentQueryRtf = queryRichTextBox.Rtf;
             ViewerSettings.Instance.Save();
         }
 
@@ -802,12 +811,19 @@ namespace SqlServerParseTreeViewer
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    ViewerSettings.Instance.AddRecentQuery(ViewerSettings.Instance.CurrentQuery);
+                    ViewerSettings.Instance.AddRecentQuery(ViewerSettings.Instance.CurrentQuery, ViewerSettings.Instance.CurrentQueryRtf);
                     ViewerSettings.Instance.Save();
 
                     string selectedQuery = form.SelectedQuery;
-                    if (string.IsNullOrEmpty(selectedQuery) == false)
+                    string selectedQueryRtf = form.SelectedQueryRtf;
+
+                    if (string.IsNullOrEmpty(selectedQueryRtf) == false)
                     {
+                        queryRichTextBox.Rtf = selectedQueryRtf;
+                    }
+                    else if (string.IsNullOrEmpty(selectedQuery) == false)
+                    {
+                        queryRichTextBox.Clear();
                         queryRichTextBox.Text = selectedQuery;
                     }
                 }

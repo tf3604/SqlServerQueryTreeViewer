@@ -10,7 +10,7 @@ namespace SqlServerParseTreeViewer
     [DataContract]
     internal class SubmittedQueryInfo
     {
-        public SubmittedQueryInfo(string queryText)
+        public SubmittedQueryInfo(string queryText, string rtf)
         {
             if (string.IsNullOrEmpty(queryText))
             {
@@ -18,6 +18,7 @@ namespace SqlServerParseTreeViewer
             }
 
             QueryText = queryText;
+            QueryTextRtf = rtf;
             AssociatedTime = DateTime.Now;
         }
 
@@ -26,6 +27,13 @@ namespace SqlServerParseTreeViewer
         {
             get;
             private set;
+        }
+
+        [DataMember]
+        public string QueryTextRtf
+        {
+            get;
+            set;
         }
 
         [DataMember]

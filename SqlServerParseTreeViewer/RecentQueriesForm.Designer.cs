@@ -50,6 +50,7 @@
             this.queryRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.queryRichTextBox.BackColor = System.Drawing.Color.White;
             this.queryRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.queryRichTextBox.Location = new System.Drawing.Point(231, 13);
             this.queryRichTextBox.Name = "queryRichTextBox";

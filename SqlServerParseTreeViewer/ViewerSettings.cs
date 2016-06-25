@@ -90,6 +90,13 @@ namespace SqlServerParseTreeViewer
         }
 
         [DataMember]
+        public string CurrentQueryRtf
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public string CurrentFileName
         {
             get;
@@ -237,7 +244,7 @@ namespace SqlServerParseTreeViewer
             return operatorColor?.DisplayColor;
         }
 
-        public void AddRecentQuery(string queryText)
+        public void AddRecentQuery(string queryText, string rtf)
         {
             if (string.IsNullOrEmpty(queryText) == false)
             {
@@ -247,7 +254,7 @@ namespace SqlServerParseTreeViewer
                     _recentQueries.Remove(match);
                 }
 
-                _recentQueries.Add(new SubmittedQueryInfo( queryText));
+                _recentQueries.Add(new SubmittedQueryInfo(queryText, rtf));
                 while (_recentQueries.Count > _maxRecentQueries)
                 {
                     _recentQueries.RemoveAt(0);

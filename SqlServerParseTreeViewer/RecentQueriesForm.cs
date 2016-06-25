@@ -31,6 +31,20 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        public string SelectedQueryRtf
+        {
+            get
+            {
+                SubmittedQueryInfo query = recentQueryListBox.SelectedItem as SubmittedQueryInfo;
+                if (query != null)
+                {
+                    return query.QueryTextRtf;
+                }
+
+                return null;
+            }
+        }
+
         private void RecentQueriesForm_Load(object sender, EventArgs e)
         {
             recentQueryListBox.Items.Clear();
@@ -46,7 +60,15 @@ namespace SqlServerParseTreeViewer
             SubmittedQueryInfo query = recentQueryListBox.SelectedItem as SubmittedQueryInfo;
             if (query != null)
             {
-                queryRichTextBox.Text = query.QueryText;
+                if (string.IsNullOrEmpty(query.QueryTextRtf) == false)
+                {
+                    queryRichTextBox.Rtf = query.QueryTextRtf;
+                }
+                else
+                {
+                    queryRichTextBox.Clear();
+                    queryRichTextBox.Text = query.QueryText;
+                }
             }
         }
 
