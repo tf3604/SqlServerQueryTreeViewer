@@ -97,6 +97,10 @@ namespace SqlServerParseTreeViewer
         private static string ComputeListSignature()
         {
             StringBuilder sb = new StringBuilder();
+            if (ViewerSettings.Clone.TraceFlags == null)
+            {
+                return string.Empty;
+            }
             List<TraceFlag> traceFlags = ViewerSettings.Clone.TraceFlags.ToList();
             traceFlags.Sort((x, y) => x.TraceFlagNumber.CompareTo(y.TraceFlagNumber));
             traceFlags.ForEach(tf => sb.Append(tf.TraceFlagNumber.ToString() + "=" + tf.Enabled.ToString() + ";"));
