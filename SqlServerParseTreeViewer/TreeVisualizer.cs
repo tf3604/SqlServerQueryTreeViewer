@@ -24,7 +24,7 @@ namespace SqlServerParseTreeViewer
         //private static StringBuilder _operatorList = new StringBuilder();
         //private static List<OperationType> _operators = new List<OperationType>();
 
-        public static Bitmap Render(SqlParseTree tree, out List<NodeIcon> nodeIcons)
+        public static Bitmap Render(SqlParseTree tree, out List<TreeNodeIcon> nodeIcons)
         {
             if (tree == null)
             {
@@ -33,7 +33,7 @@ namespace SqlServerParseTreeViewer
 
             int maxDepth;
             int maxWidth;
-            List<NodeIcon> icons = FlattenTree(tree, out maxDepth, out maxWidth);
+            List<TreeNodeIcon> icons = FlattenTree(tree, out maxDepth, out maxWidth);
 
             int width = _leftMargin + _rightMargin + maxWidth * _blockWidth + (maxWidth - 1) * _spacingWidth;
             int height = _topMargin + _bottomMargin + maxDepth * _blockHeight + (maxDepth - 1) * _spacingHeight;
@@ -48,7 +48,7 @@ namespace SqlServerParseTreeViewer
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 graphics.FillRectangle(Brushes.White, 0, 0, width, height);
-                foreach (NodeIcon icon in icons)
+                foreach (TreeNodeIcon icon in icons)
                 {
                     Rectangle rectangle = new Rectangle(icon.Left, icon.Top, icon.Width, icon.Height);
                     //graphics.FillRectangle(Brushes.LightSteelBlue, rectangle);
@@ -100,10 +100,10 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private static List<NodeIcon> FlattenTree(SqlParseTree tree, out int maxDepth, out int maxWidth)
+        private static List<TreeNodeIcon> FlattenTree(SqlParseTree tree, out int maxDepth, out int maxWidth)
         {
             Dictionary<int, int> levelCounts = new Dictionary<int, int>();
-            List<NodeIcon> icons = new List<NodeIcon>();
+            List<TreeNodeIcon> icons = new List<TreeNodeIcon>();
 
             MeasureNode(tree.RootNode, 0, levelCounts, icons);
 
@@ -114,7 +114,7 @@ namespace SqlServerParseTreeViewer
             return icons;
         }
 
-        private static void MeasureNode(SqlParseTreeNode node, int depth, Dictionary<int, int> levelCounts, List<NodeIcon> icons)
+        private static void MeasureNode(SqlParseTreeNode node, int depth, Dictionary<int, int> levelCounts, List<TreeNodeIcon> icons)
         {
             if (levelCounts.ContainsKey(depth) == false)
             {
@@ -122,7 +122,7 @@ namespace SqlServerParseTreeViewer
             }
             levelCounts[depth]++;
 
-            NodeIcon icon = new NodeIcon();
+            TreeNodeIcon icon = new TreeNodeIcon();
 
             icon.Node = node;
             icon.X = levelCounts[depth] - 1;
@@ -140,12 +140,12 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private static void FixupParentLinks(List<NodeIcon> icons)
+        private static void FixupParentLinks(List<TreeNodeIcon> icons)
         {
-            Dictionary<SqlParseTreeNode, NodeIcon> iconMap = new Dictionary<SqlParseTreeNode, NodeIcon>();
+            Dictionary<SqlParseTreeNode, TreeNodeIcon> iconMap = new Dictionary<SqlParseTreeNode, TreeNodeIcon>();
             icons.ForEach(i => iconMap.Add(i.Node, i));
 
-            foreach (NodeIcon icon in icons)
+            foreach (TreeNodeIcon icon in icons)
             {
                 SqlParseTreeNode parentNode = icon.Node.Parent;
                 if (parentNode != null)
@@ -160,14 +160,14 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private static void CenterLevels(List<NodeIcon> icons, int overallWidth)
+        private static void CenterLevels(List<TreeNodeIcon> icons, int overallWidth)
         {
-            Dictionary<int, List<NodeIcon>> iconsByLevel = new Dictionary<int, List<NodeIcon>>();
-            foreach (NodeIcon icon in icons)
+            Dictionary<int, List<TreeNodeIcon>> iconsByLevel = new Dictionary<int, List<TreeNodeIcon>>();
+            foreach (TreeNodeIcon icon in icons)
             {
                 if (iconsByLevel.ContainsKey(icon.Y) == false)
                 {
-                    iconsByLevel.Add(icon.Y, new List<NodeIcon>());
+                    iconsByLevel.Add(icon.Y, new List<TreeNodeIcon>());
                 }
                 iconsByLevel[icon.Y].Add(icon);
             }
@@ -183,15 +183,15 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private static void BalanceNodes(List<NodeIcon> icons)
+        private static void BalanceNodes(List<TreeNodeIcon> icons)
         {
             int depth = icons.Max(i => i.Y);
             while (depth >= 0)
             {
-                List<NodeIcon> iconsAtDepth = icons.Where(i => i.Y == depth).ToList();
+                List<TreeNodeIcon> iconsAtDepth = icons.Where(i => i.Y == depth).ToList();
                 iconsAtDepth.Sort((a, b) => a.X.CompareTo(b.X));
 
-                foreach (NodeIcon icon in iconsAtDepth)
+                foreach (TreeNodeIcon icon in iconsAtDepth)
                 {
                     icon.DescendantWidth =
                         Math.Max(
@@ -203,10 +203,10 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private static void PositionNodes(List<NodeIcon> icons, out int width)
+        private static void PositionNodes(List<TreeNodeIcon> icons, out int width)
         {
             // Get the root node
-            NodeIcon root = icons.FirstOrDefault(i => i.Parent == null);
+            TreeNodeIcon root = icons.FirstOrDefault(i => i.Parent == null);
             if (root == null)
             {
                 throw new ApplicationException("Cannot find root node!");
@@ -217,14 +217,14 @@ namespace SqlServerParseTreeViewer
             root.Left = width / 2 - _blockWidth / 2;
             int level = 0;
 
-            List<NodeIcon> nodes = new List<NodeIcon>() { root };
+            List<TreeNodeIcon> nodes = new List<TreeNodeIcon>() { root };
             while (nodes.Count > 0)
             {
                 level++;
-                foreach (NodeIcon node in nodes)
+                foreach (TreeNodeIcon node in nodes)
                 {
                     node.Children.Sort((a, b) => a.X.CompareTo(b.X));
-                    foreach (NodeIcon child in node.Children)
+                    foreach (TreeNodeIcon child in node.Children)
                     {
                         int previousSiblingWidth = node.Children.Where(n => n.X < child.X).Sum(n => n.DescendantWidth) +
                             node.Children.Count(n => n.X < child.X) * _interChildSpacingWidth;

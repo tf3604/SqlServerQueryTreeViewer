@@ -6,43 +6,35 @@ using System.Threading.Tasks;
 
 namespace bkh.ParseTreeLib
 {
-    public class NodeIcon
+    public class SqlMemoGroup
     {
-        public int X
+        public SqlMemoGroup()
+        {
+            Operations = new List<SqlMemoNode>();
+        }
+
+        public int GroupNumber
         {
             get;
             set;
         }
 
-        public int Y
+        public string Arguments
         {
             get;
             set;
         }
 
-        public int Left
+        public bool IsRoot
         {
             get;
             set;
         }
 
-        public int Top
+        public List<SqlMemoNode> Operations
         {
             get;
-            set;
+            private set;
         }
-
-        public int Width
-        {
-            get;
-            set;
-        }
-
-        public int Height
-        {
-            get;
-            set;
-        }
-
     }
 }

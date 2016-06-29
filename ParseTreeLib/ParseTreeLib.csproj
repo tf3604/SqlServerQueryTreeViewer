@@ -54,10 +54,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemoNodeIcon.cs" />
     <Compile Include="MemoTextParser.cs" />
     <Compile Include="NodeIcon.cs" />
+    <Compile Include="TreeNodeIcon.cs" />
     <Compile Include="OperationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlMemo.cs" />
+    <Compile Include="SqlMemoGroup.cs" />
+    <Compile Include="SqlMemoNode.cs" />
+    <Compile Include="SqlMemoNodeIdentifier.cs" />
     <Compile Include="SqlParseTree.cs" />
     <Compile Include="SqlParseTreeNode.cs" />
     <Compile Include="TreeTextParser.cs" />

@@ -44,11 +44,34 @@ namespace SqlServerParseTreeViewer
             tab.Size = mainTabControl.Size;
             subTab.Size = tab.Size;
 
-            List<NodeIcon> nodeIcons;
-            Bitmap bitmap = TreeVisualizer.Render(tree, out nodeIcons);
+            List<TreeNodeIcon> treeNodeIcons;
+            Bitmap bitmap = TreeVisualizer.Render(tree, out treeNodeIcons);
             subTab.DrawingSurface.Image = bitmap;
             subTab.TreeText = tree.InnerTreeText;
-            subTab.SetIcons(nodeIcons);
+            subTab.SetIcons(treeNodeIcons.ConvertAll(i => i as NodeIcon));
+
+            return tab;
+        }
+
+        public TabPage DrawMemo(SqlMemo memo)
+        {
+            TabPage tab = new TabPage(memo.Description);
+
+            ParseTreeTab subTab = new ParseTreeTab();
+            subTab.Left = 0;
+            subTab.Top = 0;
+            subTab.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            subTab.IsMemo = true;
+
+            tab.Controls.Add(subTab);
+            tab.Size = mainTabControl.Size;
+            subTab.Size = tab.Size;
+
+            List<MemoNodeIcon> memoNodeIcons;
+            Bitmap bitmap = MemoVisualizer.Render(memo, out memoNodeIcons);
+            subTab.DrawingSurface.Image = bitmap;
+            subTab.TreeText = memo.InnerText;
+            subTab.SetIcons(memoNodeIcons.ConvertAll(i => i as NodeIcon));
 
             return tab;
         }
@@ -230,9 +253,17 @@ namespace SqlServerParseTreeViewer
                 }
 
                 List<SqlParseTree> trees = new List<SqlParseTree>(TreeTextParser.Parse(sqlOutput));
+                List<SqlMemo> memos = new List<SqlMemo>(MemoTextParser.Parse(sqlOutput));
+
                 foreach (SqlParseTree tree in trees)
                 {
                     TabPage tab = DrawTree(tree);
+                    mainTabControl.TabPages.Add(tab);
+                }
+
+                foreach (SqlMemo memo in memos)
+                {
+                    TabPage tab = DrawMemo(memo);
                     mainTabControl.TabPages.Add(tab);
                 }
 

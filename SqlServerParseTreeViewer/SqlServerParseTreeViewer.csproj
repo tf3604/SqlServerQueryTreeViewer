@@ -89,6 +89,7 @@
     <Compile Include="InfoTrackerUserControl.Designer.cs">
       <DependentUpon>InfoTrackerUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MemoVisualizer.cs" />
     <Compile Include="OperatorColor.cs" />
     <Compile Include="OperatorColorsUserControl.cs">
       <SubType>UserControl</SubType>

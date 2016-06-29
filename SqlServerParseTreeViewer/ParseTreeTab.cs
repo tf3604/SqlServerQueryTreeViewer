@@ -52,6 +52,23 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        public bool IsMemo
+        {
+            set
+            {
+                if (value == true)
+                {
+                    treeViewTab.Text = "Memo View";
+                    treeTextTab.Text = "Memo Text";
+                }
+                else
+                {
+                    treeViewTab.Text = "Tree View";
+                    treeTextTab.Text = "Tree Text";
+                }
+            }
+        }
+
         public void SetIcons(List<NodeIcon> icons)
         {
             if (icons == null)
@@ -81,6 +98,7 @@ namespace SqlServerParseTreeViewer
 
         private void TreeViewImage_MouseClick(object sender, MouseEventArgs e)
         {
+            string noArgumentsMessage = "[No arguments to display]";
             Point mouseLocation = new Point(e.X, e.Y);
             NodeIcon selectedIcon = GetMatchingNodeIcon(mouseLocation);
             if (selectedIcon != null)
@@ -92,13 +110,30 @@ namespace SqlServerParseTreeViewer
                     _currentToolTip = null;
                 }
 
-                string text = FormatText(selectedIcon.Node.Arguments);
-                if (string.IsNullOrEmpty(text))
+                string text = string.Empty;
+                if (selectedIcon is TreeNodeIcon)
                 {
-                    text = "[No arguments to display]";
+                    TreeNodeIcon treeIcon = selectedIcon as TreeNodeIcon;
+                    text = FormatText(treeIcon.Node.Arguments);
+                    if (string.IsNullOrEmpty(text))
+                    {
+                        text = noArgumentsMessage;
+                    }
+
+                    text = treeIcon.Node.OperationName + Environment.NewLine + text;
+                }
+                else if (selectedIcon is MemoNodeIcon)
+                {
+                    MemoNodeIcon memoIcon = selectedIcon as MemoNodeIcon;
+                    text = FormatText(memoIcon.Node.Arguments);
+                    if (string.IsNullOrEmpty(text))
+                    {
+                        text = noArgumentsMessage;
+                    }
+
+                    text = memoIcon.Node.OperationName + Environment.NewLine + text;
                 }
 
-                text = selectedIcon.Node.OperationName + Environment.NewLine + text;
                 text = text.Trim();
 
                 int numberOfLines = text.Count(c => c == '\r') + 1;
