@@ -47,6 +47,12 @@ namespace SqlServerParseTreeViewer
             ComponentResourceManager disclaimerResources = new ComponentResourceManager(typeof(DisclaimerForm));
             disclaimerLabel.Text = disclaimerResources.GetString("disclaimerLabel.Text");
 
+            if (assembly.GetName().Version.Major == 0)
+            {
+                disclaimerLabel.Text += Environment.NewLine + Environment.NewLine +
+                    "This is BETA software, and any feature is subject to change at any time!";
+            }
+
             ComponentResourceManager viewerResources = new ComponentResourceManager(typeof(ViewerForm));
             Icon icon = (Icon)(viewerResources.GetObject("$this.Icon"));
             iconPictureBox.Image = icon.ToBitmap();
