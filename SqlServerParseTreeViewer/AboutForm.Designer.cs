@@ -48,7 +48,7 @@ namespace SqlServerParseTreeViewer
             this.appNameLabel = new System.Windows.Forms.Label();
             this.copyrightLabel = new System.Windows.Forms.Label();
             this.companyLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.disclaimerLabel = new System.Windows.Forms.Label();
+            this.disclaimerLabel = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.versionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
@@ -95,10 +95,12 @@ namespace SqlServerParseTreeViewer
             // disclaimerLabel
             // 
             this.disclaimerLabel.Location = new System.Drawing.Point(12, 78);
+            this.disclaimerLabel.Multiline = true;
             this.disclaimerLabel.Name = "disclaimerLabel";
+            this.disclaimerLabel.ReadOnly = true;
+            this.disclaimerLabel.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.disclaimerLabel.Size = new System.Drawing.Size(476, 146);
             this.disclaimerLabel.TabIndex = 13;
-            this.disclaimerLabel.Text = "label1";
             // 
             // okButton
             // 
@@ -152,7 +154,7 @@ namespace SqlServerParseTreeViewer
         private System.Windows.Forms.Label appNameLabel;
         private System.Windows.Forms.Label copyrightLabel;
         private System.Windows.Forms.LinkLabel companyLinkLabel;
-        private System.Windows.Forms.Label disclaimerLabel;
+        private System.Windows.Forms.TextBox disclaimerLabel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label versionLabel;
     }

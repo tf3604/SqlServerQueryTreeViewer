@@ -69,6 +69,9 @@ namespace SqlServerParseTreeViewer
                     "This is BETA software, and any feature is subject to change at any time!";
             }
 
+            disclaimerLabel.Text += Environment.NewLine + Environment.NewLine +
+                SqlServerParseTreeViewerResources.MITLicense;
+
             ComponentResourceManager viewerResources = new ComponentResourceManager(typeof(ViewerForm));
             Icon icon = (Icon)(viewerResources.GetObject("$this.Icon"));
             iconPictureBox.Image = icon.ToBitmap();

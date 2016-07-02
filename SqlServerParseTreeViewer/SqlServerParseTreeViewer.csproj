@@ -122,6 +122,11 @@
     <Compile Include="ShowThumbnailForm.Designer.cs">
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlServerParseTreeViewerResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SqlServerParseTreeViewerResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SubmittedQueryInfo.cs" />
     <Compile Include="TraceFlag.cs" />
     <Compile Include="TraceFlagUserControl.cs">
@@ -168,6 +173,10 @@
     <EmbeddedResource Include="ShowThumbnailForm.resx">
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SqlServerParseTreeViewerResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SqlServerParseTreeViewerResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TraceFlagUserControl.resx">
       <DependentUpon>TraceFlagUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -208,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
+    <None Include="Resources\MITLicense.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
