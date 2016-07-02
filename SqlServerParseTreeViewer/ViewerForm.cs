@@ -925,9 +925,12 @@ namespace SqlServerParseTreeViewer
                     }
                 }
 
-                // Handle trace flags that are enabled in options but not returned by dbcc tracestatus
-                List<TraceFlag> traceFlags = ViewerSettings.Instance.TraceFlags.Where(tf => tf.Enabled && discoveredTraceFlags.Contains(tf.TraceFlagNumber) == false).ToList();
-                traceFlags.ForEach(tf => ToggleTraceFlag(tf.TraceFlagNumber, true));
+                if (ViewerSettings.Instance.TraceFlags != null)
+                {
+                    // Handle trace flags that are enabled in options but not returned by dbcc tracestatus
+                    List<TraceFlag> traceFlags = ViewerSettings.Instance.TraceFlags.Where(tf => tf.Enabled && discoveredTraceFlags.Contains(tf.TraceFlagNumber) == false).ToList();
+                    traceFlags.ForEach(tf => ToggleTraceFlag(tf.TraceFlagNumber, true));
+                }
             }
         }
 
