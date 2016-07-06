@@ -498,7 +498,8 @@ namespace SqlServerParseTreeViewer
                     Clipboard.SetText(messagesTextBox.Text);
                 }
             }
-            else if (currentTab.Text == _tabTitleResults)
+            else if (currentTab.Text == _tabTitleResults ||
+                FindFirstControlOfType<DataGridView>(currentTab.Controls) != null)
             {
                 List<DataGridView> grids = FindControlsOfType<DataGridView>(currentTab.Controls);
                 if (grids != null)
@@ -624,6 +625,7 @@ namespace SqlServerParseTreeViewer
                 type == typeof(sbyte) ||
                 type == typeof(decimal) ||
                 type == typeof(float) ||
+                type == typeof(double) ||
                 type == typeof(decimal) ||
                 type == typeof(Guid))
             {
