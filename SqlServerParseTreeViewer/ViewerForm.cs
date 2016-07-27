@@ -184,6 +184,18 @@ namespace SqlServerParseTreeViewer
 
         private void OnExecuteComplete(object sender, SqlExecuteCompleteEventArgs e)
         {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<object, SqlExecuteCompleteEventArgs>(DisplayResults), sender, e);
+            }
+            else
+            {
+                DisplayResults(sender, e);
+            }
+        }
+
+        private void DisplayResults(object sender, SqlExecuteCompleteEventArgs e)
+        {
             string sqlOutput = _currentExecutionEngine.Messages;
 
             TabPage pageToBeActivated = _messagesTab;

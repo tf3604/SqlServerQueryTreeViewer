@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using bkh.ParseTreeLib;
 
@@ -76,28 +77,27 @@ namespace SqlServerParseTreeViewer
 
         public void StartExecution()
         {
+            Thread workerThread = new Thread(new ThreadStart(ExecuteAllSql));
+
+            workerThread.IsBackground = true;
+            workerThread.Start();
+        }
+
+        private void ExecuteAllSql()
+        {
             List<string> sqlBatches = SplitSqlIntoBatches(_sql);
             _resultTables = new List<DataTable>();
             _messages = new StringBuilder();
             _outputMessages = new List<OutputMessage>();
 
-            if (ViewerSettings.Instance.TrackOptimizerInfo)
-            {
-                OptimizerInfoTracker.PreExecute(_connection);
-            }
+            InitializeTrackers();
 
-            if (ViewerSettings.Instance.TrackTransformationStats)
+            using (Dal dal = new Dal(_connection))
             {
-                TransformationStatsTracker.PreExecute(_connection);
-            }
-
-            foreach (string sql in sqlBatches)
-            {
-                using (Dal dal = new Dal(_connection))
+                foreach (string sql in sqlBatches)
                 {
                     _connection.InfoMessage += CaptureMessages;
                     _connection.FireInfoMessageEventOnUserErrors = true;
-
 
                     try
                     {
@@ -116,27 +116,7 @@ namespace SqlServerParseTreeViewer
                 }
             }
 
-            if (ViewerSettings.Instance.TrackOptimizerInfo)
-            {
-                OptimizerInfoTracker.PostExecute(_connection);
-            }
-
-            if (ViewerSettings.Instance.TrackTransformationStats)
-            {
-                TransformationStatsTracker.PostExecute(_connection);
-            }
-
-            _optimizerInfoTable = null;
-            if (ViewerSettings.Instance.TrackOptimizerInfo)
-            {
-                _optimizerInfoTable = OptimizerInfoTracker.AnalyzeResults(_connection);
-            }
-
-            _transformationStatsTable = null;
-            if (ViewerSettings.Instance.TrackTransformationStats)
-            {
-                _transformationStatsTable = TransformationStatsTracker.AnalyzeResults(_connection);
-            }
+            FinalizeTrackers();
 
             EventHandler<SqlExecuteCompleteEventArgs> executeCompleteHandler = this.ExecuteComplete;
             if (executeCompleteHandler != null)
@@ -198,5 +178,42 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        private void InitializeTrackers()
+        {
+            if (ViewerSettings.Instance.TrackOptimizerInfo)
+            {
+                OptimizerInfoTracker.PreExecute(_connection);
+            }
+
+            if (ViewerSettings.Instance.TrackTransformationStats)
+            {
+                TransformationStatsTracker.PreExecute(_connection);
+            }
+        }
+
+        private void FinalizeTrackers()
+        {
+            if (ViewerSettings.Instance.TrackOptimizerInfo)
+            {
+                OptimizerInfoTracker.PostExecute(_connection);
+            }
+
+            if (ViewerSettings.Instance.TrackTransformationStats)
+            {
+                TransformationStatsTracker.PostExecute(_connection);
+            }
+
+            _optimizerInfoTable = null;
+            if (ViewerSettings.Instance.TrackOptimizerInfo)
+            {
+                _optimizerInfoTable = OptimizerInfoTracker.AnalyzeResults(_connection);
+            }
+
+            _transformationStatsTable = null;
+            if (ViewerSettings.Instance.TrackTransformationStats)
+            {
+                _transformationStatsTable = TransformationStatsTracker.AnalyzeResults(_connection);
+            }
+        }
     }
 }
