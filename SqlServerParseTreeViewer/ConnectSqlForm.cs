@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using bkh.ParseTreeLib;
 
 namespace SqlServerParseTreeViewer
 {
@@ -32,14 +33,14 @@ namespace SqlServerParseTreeViewer
         private const string _winAuth = "Windows Authentication";
         private const string _sqlAuth = "SQL Server Authentication";
 
-        private SqlConnection _connection = null;
+        private ApplicationSqlConnection _connection = null;
 
         public ConnectSqlForm()
         {
             InitializeComponent();
         }
 
-        public SqlConnection SqlConnection
+        public ApplicationSqlConnection Connection
         {
             get
             {
@@ -47,7 +48,7 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private SqlConnection AcquireConnection()
+        private ApplicationSqlConnection AcquireConnection()
         {
             SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder();
             sb.DataSource = this.serverNameComboBox.Text;
@@ -63,18 +64,18 @@ namespace SqlServerParseTreeViewer
                 sb.Password = this.passwordTextBox.Text;
             }
 
-            SqlConnection connection = null;
+            SqlConnection sqlConnection = null;
             try
             {
-                connection = new SqlConnection(sb.ToString());
-                connection.Open();
-                return connection;
+                sqlConnection = new SqlConnection(sb.ToString());
+                sqlConnection.Open();
+                return new ApplicationSqlConnection(sqlConnection);
             }
             catch
             {
-                if (connection != null)
+                if (sqlConnection != null)
                 {
-                    connection.Dispose();
+                    sqlConnection.Dispose();
                 }
                 throw;
             }
@@ -122,8 +123,7 @@ namespace SqlServerParseTreeViewer
             {
                 this.Cursor = Cursors.WaitCursor;
                 this.Enabled = false;
-                SqlConnection connection = this.AcquireConnection();
-                _connection = connection;
+                _connection = this.AcquireConnection();
             }
             catch (Exception ex)
             {

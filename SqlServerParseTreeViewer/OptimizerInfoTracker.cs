@@ -17,10 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using bkh.ParseTreeLib;
 
 namespace SqlServerParseTreeViewer
 {
@@ -35,47 +35,56 @@ namespace SqlServerParseTreeViewer
         private static string _dropAfterTable = string.Format("if object_id('tempdb..{0}') is not null drop table {0};", _afterTempTableName);
         private static string _dropTables = _dropBeforeTable + _dropAfterTable;
 
-        public static void PreExecute(SqlConnection connection)
+        public static void PreExecute(ApplicationSqlConnection connection)
         {
-            // Run the before and after scripts once just to make sure they are in the plan cache and don't skew the results
-            ExecuteNonQuery(connection, _captureBeforeData);
-            ExecuteNonQuery(connection, _captureAfterData);
-
-            // Drop the temporary tables
-            ExecuteNonQuery(connection, _dropTables);
-
-            // Capture the before data
-            ExecuteNonQuery(connection, _captureBeforeData);
-        }
-
-        public static void PostExecute(SqlConnection connection)
-        {
-            // Capture the after data
-            ExecuteNonQuery(connection, _captureAfterData);
-        }
-
-        public static DataTable AnalyzeResults(SqlConnection connection)
-        {
-            // Query the differences
-            string sql = "select a.counter, a.occurrence - b.occurrence occurrence, a.occurrence * a.value - b.occurrence * b.value value from " +
-                _beforeTempTableName + " b join " + _afterTempTableName + " a on a.counter = b.counter where a.occurrence != b.occurrence order by counter;";
-            DataTable differenceTable = ExecuteQuery(connection, sql);
-
-            try
+            using (Dal dal = new Dal(connection))
             {
+                // Run the before and after scripts once just to make sure they are in the plan cache and don't skew the results
+                dal.ExecuteQueryNoResultSets(_captureBeforeData);
+                dal.ExecuteQueryNoResultSets(_captureAfterData);
+
                 // Drop the temporary tables
-                ExecuteNonQuery(connection, _dropTables);
+                dal.ExecuteQueryNoResultSets(_dropTables);
 
-                return differenceTable;
+                // Capture the before data
+                dal.ExecuteQueryNoResultSets(_captureBeforeData);
             }
-            catch
+        }
+
+        public static void PostExecute(ApplicationSqlConnection connection)
+        {
+            using (Dal dal = new Dal(connection))
             {
-                if (differenceTable != null)
+                // Capture the after data
+                dal.ExecuteQueryNoResultSets(_captureAfterData);
+            }
+        }
+
+        public static DataTable AnalyzeResults(ApplicationSqlConnection connection)
+        {
+            using (Dal dal = new Dal(connection))
+            {
+                // Query the differences
+                string sql = "select a.counter, a.occurrence - b.occurrence occurrence, a.occurrence * a.value - b.occurrence * b.value value from " +
+                    _beforeTempTableName + " b join " + _afterTempTableName + " a on a.counter = b.counter where a.occurrence != b.occurrence order by counter;";
+                DataTable differenceTable = dal.ExecuteQueryOneResultSet(sql);
+
+                try
                 {
-                    differenceTable.Dispose();
-                    differenceTable = null;
+                    // Drop the temporary tables
+                    dal.ExecuteQueryNoResultSets(_dropTables);
+
+                    return differenceTable;
                 }
-                throw;
+                catch
+                {
+                    if (differenceTable != null)
+                    {
+                        differenceTable.Dispose();
+                        differenceTable = null;
+                    }
+                    throw;
+                }
             }
         }
     }

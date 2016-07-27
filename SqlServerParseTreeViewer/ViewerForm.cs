@@ -37,7 +37,7 @@ namespace SqlServerParseTreeViewer
         private const string _tabTitleResults = "Results";
         private const string _dialogFileFilter = "SQL Server Files (*.sql)|*.sql|All Files (*.*)|*.*";
 
-        private SqlConnection _connection;
+        private ApplicationSqlConnection _connection;
         private StringBuilder _messages;
         private List<OutputMessage> _outputMessages;
 
@@ -112,7 +112,7 @@ namespace SqlServerParseTreeViewer
             try
             {
                 if (_connection == null ||
-                    _connection.State != ConnectionState.Open)
+                    _connection.IsAvailable == false)
                 {
                     if (ConnectDatabase() == false)
                     {
@@ -163,35 +163,30 @@ namespace SqlServerParseTreeViewer
 
                 foreach (string sql in sqlBatches)
                 {
-                    using (DataSet resultSet = new DataSet())
+                    using (Dal dal = new Dal(_connection))
                     {
-                        using (SqlCommand command = new SqlCommand(sql, _connection))
+                        _connection.InfoMessage += CaptureMessages;
+                        _connection.FireInfoMessageEventOnUserErrors = true;
+
+                        this.executeButton.Enabled = false;
+                        Cursor oldCursor = this.Cursor;
+
+                        try
                         {
-                            _connection.InfoMessage += CaptureMessages;
-                            _connection.FireInfoMessageEventOnUserErrors = true;
-
-                            this.executeButton.Enabled = false;
-                            Cursor oldCursor = this.Cursor;
-
-                            try
+                            this.Cursor = Cursors.WaitCursor;
+                            using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
                             {
-                                this.Cursor = Cursors.WaitCursor;
-                                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                                {
-                                    adapter.Fill(resultSet);
-                                }
-
                                 foreach (DataTable table in resultSet.Tables)
                                 {
                                     resultTables.Add(table.Copy());
                                 }
                             }
-                            finally
-                            {
-                                _connection.InfoMessage -= CaptureMessages;
-                                this.Cursor = oldCursor;
-                                this.executeButton.Enabled = true;
-                            }
+                        }
+                        finally
+                        {
+                            _connection.InfoMessage -= CaptureMessages;
+                            this.Cursor = oldCursor;
+                            this.executeButton.Enabled = true;
                         }
                     }
                 }
@@ -452,7 +447,7 @@ namespace SqlServerParseTreeViewer
                 DialogResult result = connectForm.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    _connection = connectForm.SqlConnection;
+                    _connection = connectForm.Connection;
                     SetTraceFlags();
                     return true;
                 }
@@ -900,38 +895,33 @@ namespace SqlServerParseTreeViewer
         {
             string sql = @"dbcc tracestatus();";
 
-            using (DataTable table = new DataTable())
+            using (Dal dal = new Dal(_connection))
             {
-                using (SqlCommand command = new SqlCommand(sql, _connection))
+                using (DataTable table = dal.ExecuteQueryOneResultSet(sql))
                 {
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    List<int> discoveredTraceFlags = new List<int>();
+                    foreach (DataRow row in table.Rows)
                     {
-                        adapter.Fill(table);
-                    }
-                }
+                        int traceFlagNumber = (int)(short)row["TraceFlag"];
+                        bool enabledForSession = (short)row["Session"] != 0;
 
-                List<int> discoveredTraceFlags = new List<int>();
-                foreach (DataRow row in table.Rows)
-                {
-                    int traceFlagNumber = (int)(short)row["TraceFlag"];
-                    bool enabledForSession = (short)row["Session"] != 0;
-
-                    discoveredTraceFlags.Add(traceFlagNumber);
-                    TraceFlag traceFlag = ViewerSettings.Instance.TraceFlags.FirstOrDefault(tf => tf.TraceFlagNumber == traceFlagNumber);
-                    if (traceFlag != null)
-                    {
-                        if (traceFlag.Enabled != enabledForSession)
+                        discoveredTraceFlags.Add(traceFlagNumber);
+                        TraceFlag traceFlag = ViewerSettings.Instance.TraceFlags.FirstOrDefault(tf => tf.TraceFlagNumber == traceFlagNumber);
+                        if (traceFlag != null)
                         {
-                            ToggleTraceFlag(traceFlagNumber, traceFlag.Enabled);
+                            if (traceFlag.Enabled != enabledForSession)
+                            {
+                                ToggleTraceFlag(traceFlagNumber, traceFlag.Enabled);
+                            }
                         }
                     }
-                }
 
-                if (ViewerSettings.Instance.TraceFlags != null)
-                {
-                    // Handle trace flags that are enabled in options but not returned by dbcc tracestatus
-                    List<TraceFlag> traceFlags = ViewerSettings.Instance.TraceFlags.Where(tf => tf.Enabled && discoveredTraceFlags.Contains(tf.TraceFlagNumber) == false).ToList();
-                    traceFlags.ForEach(tf => ToggleTraceFlag(tf.TraceFlagNumber, true));
+                    if (ViewerSettings.Instance.TraceFlags != null)
+                    {
+                        // Handle trace flags that are enabled in options but not returned by dbcc tracestatus
+                        List<TraceFlag> traceFlags = ViewerSettings.Instance.TraceFlags.Where(tf => tf.Enabled && discoveredTraceFlags.Contains(tf.TraceFlagNumber) == false).ToList();
+                        traceFlags.ForEach(tf => ToggleTraceFlag(tf.TraceFlagNumber, true));
+                    }
                 }
             }
         }
@@ -948,9 +938,9 @@ namespace SqlServerParseTreeViewer
                 sql = string.Format("dbcc traceoff({0});", traceFlagNumber);
             }
 
-            using (SqlCommand command = new SqlCommand(sql, _connection))
+            using (Dal dal = new Dal(_connection))
             {
-                command.ExecuteNonQuery();
+                dal.ExecuteQueryNoResultSets(sql);
             }
         }
     }
