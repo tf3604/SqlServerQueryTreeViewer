@@ -104,12 +104,14 @@
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OutputMessage.cs" />
     <Compile Include="ParseTreeTab.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ParseTreeTab.Designer.cs">
       <DependentUpon>ParseTreeTab.cs</DependentUpon>
     </Compile>
+    <Compile Include="QueryExecutionEngine.cs" />
     <Compile Include="RecentQueriesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +124,7 @@
     <Compile Include="ShowThumbnailForm.Designer.cs">
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlExecuteCompleteEventArgs.cs" />
     <Compile Include="SqlServerParseTreeViewerResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

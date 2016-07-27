@@ -38,8 +38,10 @@ namespace SqlServerParseTreeViewer
         private const string _dialogFileFilter = "SQL Server Files (*.sql)|*.sql|All Files (*.*)|*.*";
 
         private ApplicationSqlConnection _connection;
-        private StringBuilder _messages;
-        private List<OutputMessage> _outputMessages;
+        private QueryExecutionEngine _currentExecutionEngine = null;
+
+        private TabPage _messagesTab;
+        private RichTextBox _messagesTextBox;
 
         public ViewerForm()
         {
@@ -99,15 +101,15 @@ namespace SqlServerParseTreeViewer
 
         private void Execute()
         {
-            TabPage messagesTab = new TabPage(_tabTitleMessages);
-            RichTextBox messagesTextBox = new RichTextBox();
-            messagesTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-            messagesTextBox.Size = messagesTab.Size;
-            messagesTextBox.WordWrap = false;
-            messagesTextBox.Multiline = true;
-            messagesTextBox.ScrollBars = RichTextBoxScrollBars.Both;
-            messagesTextBox.Font = new Font("Consolas", 10);
-            messagesTab.Controls.Add(messagesTextBox);
+            _messagesTab = new TabPage(_tabTitleMessages);
+            _messagesTextBox = new RichTextBox();
+            _messagesTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            _messagesTextBox.Size = _messagesTab.Size;
+            _messagesTextBox.WordWrap = false;
+            _messagesTextBox.Multiline = true;
+            _messagesTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+            _messagesTextBox.Font = new Font("Consolas", 10);
+            _messagesTab.Controls.Add(_messagesTextBox);
 
             try
             {
@@ -146,154 +148,112 @@ namespace SqlServerParseTreeViewer
                     SetTraceFlags();
                 }
 
-                if (ViewerSettings.Instance.TrackOptimizerInfo)
+                this.executeButton.Enabled = false;
+                this.connectButton.Enabled = false;
+                Cursor oldCursor = this.Cursor;
+
+                try
                 {
-                    OptimizerInfoTracker.PreExecute(_connection);
+                    this.Cursor = Cursors.WaitCursor;
+
+                    _currentExecutionEngine = new QueryExecutionEngine(_connection, sqlToExecute);
+                    _currentExecutionEngine.ExecuteComplete += OnExecuteComplete;
+                    _currentExecutionEngine.StartExecution();
+                }
+                finally
+                {
+                    this.Cursor = oldCursor;
                 }
 
-                if (ViewerSettings.Instance.TrackTransformationStats)
-                {
-                    TransformationStatsTracker.PreExecute(_connection);
-                }
-
-                List<string> sqlBatches = SplitSqlIntoBatches(sqlToExecute);
-                List<DataTable> resultTables = new List<DataTable>();
-                _messages = new StringBuilder();
-                _outputMessages = new List<OutputMessage>();
-
-                foreach (string sql in sqlBatches)
-                {
-                    using (Dal dal = new Dal(_connection))
-                    {
-                        _connection.InfoMessage += CaptureMessages;
-                        _connection.FireInfoMessageEventOnUserErrors = true;
-
-                        this.executeButton.Enabled = false;
-                        Cursor oldCursor = this.Cursor;
-
-                        try
-                        {
-                            this.Cursor = Cursors.WaitCursor;
-                            using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
-                            {
-                                foreach (DataTable table in resultSet.Tables)
-                                {
-                                    resultTables.Add(table.Copy());
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            _connection.InfoMessage -= CaptureMessages;
-                            this.Cursor = oldCursor;
-                            this.executeButton.Enabled = true;
-                        }
-                    }
-                }
-
-                if (ViewerSettings.Instance.TrackOptimizerInfo)
-                {
-                    OptimizerInfoTracker.PostExecute(_connection);
-                }
-
-                if (ViewerSettings.Instance.TrackTransformationStats)
-                {
-                    TransformationStatsTracker.PostExecute(_connection);
-                }
-
-                DataTable optimizerInfoTable = null;
-                if (ViewerSettings.Instance.TrackOptimizerInfo)
-                {
-                    optimizerInfoTable = OptimizerInfoTracker.AnalyzeResults(_connection);
-                }
-
-                DataTable transformationStatsTable = null;
-                if (ViewerSettings.Instance.TrackTransformationStats)
-                {
-                    transformationStatsTable = TransformationStatsTracker.AnalyzeResults(_connection);
-                }
-
-                string sqlOutput = _messages.ToString();
-
-                TabPage pageToBeActivated = messagesTab;
-                mainTabControl.TabPages.Add(messagesTab);
-
-                foreach (OutputMessage message in _outputMessages)
-                {
-                    string text = message.Message + Environment.NewLine;
-                    messagesTextBox.SelectionStart = messagesTextBox.TextLength;
-                    messagesTextBox.SelectionLength = 0;
-
-                    messagesTextBox.SelectionColor = message.IsErrorText ? Color.Red : Color.Black;
-                    messagesTextBox.AppendText(text);
-                }
-
-                if (resultTables.Count > 0)
-                {
-                    TabPage resultsTab = new TabPage(_tabTitleResults);
-                    pageToBeActivated = resultsTab;
-                    mainTabControl.TabPages.Add(resultsTab);
-
-                    StatusBar statusBar = new StatusBar();
-                    int statusBarHeight = 20;
-                    Size gridSize = new Size(resultsTab.Width, (resultsTab.Height - statusBarHeight) / resultTables.Count);
-                    statusBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-                    statusBar.Size = new Size(resultsTab.Width, statusBarHeight);
-                    statusBar.Top = gridSize.Height * resultTables.Count;
-                    resultsTab.Controls.Add(statusBar);
-
-                    long rowCount = DisplayTablesOnTabPage(resultsTab, resultTables, gridSize);
-                    statusBar.Text = string.Format("{0} resultset(s); {1:#,##0} row(s) total", resultTables.Count, rowCount);
-                    resultsTab.Resize += ResultsTab_Resize;
-                }
-
-                if (optimizerInfoTable != null)
-                {
-                    TabPage optimizerInfoTab = new TabPage("Optimizer");
-                    mainTabControl.TabPages.Add(optimizerInfoTab);
-                    Size gridSize = new Size(optimizerInfoTab.Width, optimizerInfoTab.Height);
-                    DisplayTablesOnTabPage(optimizerInfoTab, new List<DataTable>() { optimizerInfoTable }, gridSize);
-                }
-
-                if (transformationStatsTable != null)
-                {
-                    TabPage transformationStatsTab = new TabPage("Transformations");
-                    mainTabControl.TabPages.Add(transformationStatsTab);
-                    Size gridSize = new Size(transformationStatsTab.Width, transformationStatsTab.Height);
-                    DisplayTablesOnTabPage(transformationStatsTab, new List<DataTable>() { transformationStatsTable }, gridSize);
-                }
-
-                List<SqlParseTree> trees = new List<SqlParseTree>(TreeTextParser.Parse(sqlOutput));
-                List<SqlMemo> memos = new List<SqlMemo>(MemoTextParser.Parse(sqlOutput));
-
-                foreach (SqlParseTree tree in trees)
-                {
-                    TabPage tab = DrawTree(tree);
-                    mainTabControl.TabPages.Add(tab);
-                }
-
-                foreach (SqlMemo memo in memos)
-                {
-                    TabPage tab = DrawMemo(memo);
-                    mainTabControl.TabPages.Add(tab);
-                }
-
-                mainTabControl.SelectedTab = pageToBeActivated;
             }
             catch (Exception ex)
             {
-                messagesTextBox.SelectionStart = messagesTextBox.TextLength;
-                messagesTextBox.SelectionLength = 0;
+                _messagesTextBox.SelectionStart = _messagesTextBox.TextLength;
+                _messagesTextBox.SelectionLength = 0;
 
-                messagesTextBox.SelectionColor = Color.Red;
-                messagesTextBox.AppendText(ex.ToString());
+                _messagesTextBox.SelectionColor = Color.Red;
+                _messagesTextBox.AppendText(ex.ToString());
 
-                if (mainTabControl.Controls.Contains(messagesTab) == false)
+                if (mainTabControl.Controls.Contains(_messagesTab) == false)
                 {
-                    mainTabControl.Controls.Add(messagesTab);
+                    mainTabControl.Controls.Add(_messagesTab);
                 }
-                mainTabControl.SelectedTab = messagesTab;
+                mainTabControl.SelectedTab = _messagesTab;
             }
+        }
+
+        private void OnExecuteComplete(object sender, SqlExecuteCompleteEventArgs e)
+        {
+            string sqlOutput = _currentExecutionEngine.Messages;
+
+            TabPage pageToBeActivated = _messagesTab;
+            mainTabControl.TabPages.Add(_messagesTab);
+
+            foreach (OutputMessage message in _currentExecutionEngine.OutputMessages)
+            {
+                string text = message.Message + Environment.NewLine;
+                _messagesTextBox.SelectionStart = _messagesTextBox.TextLength;
+                _messagesTextBox.SelectionLength = 0;
+
+                _messagesTextBox.SelectionColor = message.IsErrorText ? Color.Red : Color.Black;
+                _messagesTextBox.AppendText(text);
+            }
+
+            List<DataTable> resultTables = _currentExecutionEngine.ResultTables.ToList();
+            if (resultTables.Count > 0)
+            {
+                TabPage resultsTab = new TabPage(_tabTitleResults);
+                pageToBeActivated = resultsTab;
+                mainTabControl.TabPages.Add(resultsTab);
+
+                StatusBar statusBar = new StatusBar();
+                int statusBarHeight = 20;
+                Size gridSize = new Size(resultsTab.Width, (resultsTab.Height - statusBarHeight) / resultTables.Count);
+                statusBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+                statusBar.Size = new Size(resultsTab.Width, statusBarHeight);
+                statusBar.Top = gridSize.Height * resultTables.Count;
+                resultsTab.Controls.Add(statusBar);
+
+                long rowCount = DisplayTablesOnTabPage(resultsTab, resultTables, gridSize);
+                statusBar.Text = string.Format("{0} resultset(s); {1:#,##0} row(s) total", resultTables.Count, rowCount);
+                resultsTab.Resize += ResultsTab_Resize;
+            }
+
+            if (_currentExecutionEngine.OptimizerInfoTable != null)
+            {
+                TabPage optimizerInfoTab = new TabPage("Optimizer");
+                mainTabControl.TabPages.Add(optimizerInfoTab);
+                Size gridSize = new Size(optimizerInfoTab.Width, optimizerInfoTab.Height);
+                DisplayTablesOnTabPage(optimizerInfoTab, new List<DataTable>() { _currentExecutionEngine.OptimizerInfoTable }, gridSize);
+            }
+
+            if (_currentExecutionEngine.TransformationStatsTable != null)
+            {
+                TabPage transformationStatsTab = new TabPage("Transformations");
+                mainTabControl.TabPages.Add(transformationStatsTab);
+                Size gridSize = new Size(transformationStatsTab.Width, transformationStatsTab.Height);
+                DisplayTablesOnTabPage(transformationStatsTab, new List<DataTable>() { _currentExecutionEngine.TransformationStatsTable }, gridSize);
+            }
+
+            List<SqlParseTree> trees = new List<SqlParseTree>(TreeTextParser.Parse(sqlOutput));
+            List<SqlMemo> memos = new List<SqlMemo>(MemoTextParser.Parse(sqlOutput));
+
+            foreach (SqlParseTree tree in trees)
+            {
+                TabPage tab = DrawTree(tree);
+                mainTabControl.TabPages.Add(tab);
+            }
+
+            foreach (SqlMemo memo in memos)
+            {
+                TabPage tab = DrawMemo(memo);
+                mainTabControl.TabPages.Add(tab);
+            }
+
+            mainTabControl.SelectedTab = pageToBeActivated;
+
+            this.executeButton.Enabled = true;
+            this.connectButton.Enabled = true;
         }
 
         private long DisplayTablesOnTabPage(TabPage tabPage, List<DataTable> tables, Size gridSize)
@@ -345,36 +305,6 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private List<string> SplitSqlIntoBatches(string sqlToExecute)
-        {
-            List<string> batches = new List<string>();
-            string pattern = @"^GO$";
-            int startPos = 0;
-
-            Match match = Regex.Match(sqlToExecute, pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            while (match.Success)
-            {
-                string batch = sqlToExecute.Substring(startPos, match.Index - startPos);
-                if (string.IsNullOrWhiteSpace(batch) == false)
-                {
-                    batches.Add(batch.Trim());
-                }
-                startPos = match.Index + match.Length;
-                match = match.NextMatch();
-            }
-
-            if (startPos < sqlToExecute.Length)
-            {
-                string batch = sqlToExecute.Substring(startPos);
-                if (string.IsNullOrWhiteSpace(batch) == false)
-                {
-                    batches.Add(batch.Trim());
-                }
-            }
-
-            return batches;
-        }
-
         private void ResultsTab_Resize(object sender, EventArgs e)
         {
             TabPage resultsTab = sender as TabPage;
@@ -408,28 +338,6 @@ namespace SqlServerParseTreeViewer
             }
         }
 
-        private void CaptureMessages(object sender, SqlInfoMessageEventArgs e)
-        {
-            foreach (SqlError error in e.Errors)
-            {
-                OutputMessage message = new OutputMessage();
-                message.IsErrorText = error.Class > 10;
-
-                if (error.Class > 0)
-                {
-                    string errorInfo = string.Format("Msg {0}, Level {1}, State {2}, Line {3}", error.Number, error.Class, error.State, error.LineNumber);
-                    _messages.AppendLine(errorInfo);
-                    message.Message = errorInfo + Environment.NewLine + error.Message;
-                }
-                else
-                {
-                    _messages.AppendLine(error.Message);
-                    message.Message = error.Message;
-                }
-                _outputMessages.Add(message);
-            }
-        }
-
         private void ConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConnectDatabase();
@@ -453,21 +361,6 @@ namespace SqlServerParseTreeViewer
                 }
             }
             return false;
-        }
-
-        private class OutputMessage
-        {
-            public string Message
-            {
-                get;
-                set;
-            }
-
-            public bool IsErrorText
-            {
-                get;
-                set;
-            }
         }
 
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
