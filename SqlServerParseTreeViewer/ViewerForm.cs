@@ -150,6 +150,7 @@ namespace SqlServerParseTreeViewer
 
                 this.executeButton.Enabled = false;
                 this.connectButton.Enabled = false;
+                this.cancelQueryButton.Enabled = true;
                 this.executionStatus.Text = "Executing query";
                 Cursor oldCursor = this.Cursor;
 
@@ -183,6 +184,8 @@ namespace SqlServerParseTreeViewer
             {
                 DisplayResults(sender, e);
             }
+
+            _currentExecutionEngine = null;
         }
 
         private void DisplayResults(object sender, SqlExecuteCompleteEventArgs e)
@@ -195,6 +198,10 @@ namespace SqlServerParseTreeViewer
             {
                 DisplayExceptionResults(sender, e);
             }
+
+            this.executeButton.Enabled = true;
+            this.connectButton.Enabled = true;
+            this.cancelQueryButton.Enabled = false;
         }
 
         private void DisplayExceptionResults(object sender, SqlExecuteCompleteEventArgs e)
@@ -290,11 +297,13 @@ namespace SqlServerParseTreeViewer
 
             mainTabControl.SelectedTab = pageToBeActivated;
 
-            this.executeButton.Enabled = true;
-            this.connectButton.Enabled = true;
             if (hasError)
             {
                 executionStatus.Text = "Query completed with errors.";
+            }
+            else if (e.CancelledByUser)
+            {
+                executionStatus.Text = "Query was cancelled by user.";
             }
             else
             {
@@ -880,6 +889,15 @@ namespace SqlServerParseTreeViewer
             using (Dal dal = new Dal(_connection))
             {
                 dal.ExecuteQueryNoResultSets(sql);
+            }
+        }
+
+        private void CancelQueryButton_Click(object sender, EventArgs e)
+        {
+            QueryExecutionEngine executionEngine = _currentExecutionEngine;
+            if (executionEngine != null)
+            {
+                executionEngine.CancelQuery();
             }
         }
     }

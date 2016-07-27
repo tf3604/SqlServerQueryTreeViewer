@@ -11,6 +11,8 @@ namespace bkh.ParseTreeLib
     public class Dal : IDisposable
     {
         private ApplicationSqlConnection _connection;
+        private SqlCommand _currentCommand;
+        private object _commandLocker = new object();
 
         public Dal(ApplicationSqlConnection connection)
         {
@@ -44,21 +46,35 @@ namespace bkh.ParseTreeLib
 
             using (SqlCommand command = GetCommand(sql, parameters))
             {
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                lock(_commandLocker)
                 {
-                    DataTable table = new DataTable();
-                    try
+                    _currentCommand = command;
+                }
+                try
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        adapter.Fill(table);
-                        return table;
-                    }
-                    catch
-                    {
-                        if (table != null)
+                        DataTable table = new DataTable();
+                        try
                         {
-                            table.Dispose();
+                            adapter.Fill(table);
+                            return table;
                         }
-                        throw;
+                        catch
+                        {
+                            if (table != null)
+                            {
+                                table.Dispose();
+                            }
+                            throw;
+                        }
+                    }
+                }
+                finally
+                {
+                    lock(_commandLocker)
+                    {
+                        _currentCommand = null;
                     }
                 }
             }
@@ -71,24 +87,44 @@ namespace bkh.ParseTreeLib
                 throw new ArgumentNullException(nameof(sql));
             }
 
-            using (SqlCommand command = GetCommand(sql, parameters))
+            try
             {
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                using (SqlCommand command = GetCommand(sql, parameters))
                 {
-                    DataSet set = new DataSet();
-                    try
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        adapter.Fill(set);
-                        return set;
-                    }
-                    catch
-                    {
-                        if (set != null)
+                        DataSet set = new DataSet();
+                        try
                         {
-                            set.Dispose();
+                            adapter.Fill(set);
+                            return set;
                         }
-                        throw;
+                        catch
+                        {
+                            if (set != null)
+                            {
+                                set.Dispose();
+                            }
+                            throw;
+                        }
                     }
+                }
+            }
+            catch (SqlException ex) when (ex.Class == 11 && ex.Number == 0)
+            {
+                // User cancelled query.
+                return new DataSet();
+            }
+        }
+
+        public void Cancel()
+        {
+            lock(_commandLocker)
+            {
+                if (_currentCommand != null)
+                {
+                    _currentCommand.Cancel();
+                    _currentCommand = null;
                 }
             }
         }
@@ -122,6 +158,8 @@ namespace bkh.ParseTreeLib
                     command.Parameters.AddRange(parameters);
                 }
 
+                command.CommandTimeout = 0;
+                _currentCommand = command;
                 return command;
             }
             catch

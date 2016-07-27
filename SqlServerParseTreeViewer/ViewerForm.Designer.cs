@@ -74,6 +74,7 @@ namespace SqlServerParseTreeViewer
             this.executeButton = new System.Windows.Forms.ToolStripButton();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.executionStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -242,7 +243,8 @@ namespace SqlServerParseTreeViewer
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectButton,
-            this.executeButton});
+            this.executeButton,
+            this.cancelQueryButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1122, 25);
@@ -288,6 +290,17 @@ namespace SqlServerParseTreeViewer
             this.executionStatus.Name = "executionStatus";
             this.executionStatus.Size = new System.Drawing.Size(39, 17);
             this.executionStatus.Text = "Ready";
+            // 
+            // cancelQueryButton
+            // 
+            this.cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.cancelQueryButton.Enabled = false;
+            this.cancelQueryButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelQueryButton.Image")));
+            this.cancelQueryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cancelQueryButton.Name = "cancelQueryButton";
+            this.cancelQueryButton.Size = new System.Drawing.Size(47, 22);
+            this.cancelQueryButton.Text = "Cancel";
+            this.cancelQueryButton.Click += new System.EventHandler(this.CancelQueryButton_Click);
             // 
             // ViewerForm
             // 
@@ -341,6 +354,7 @@ namespace SqlServerParseTreeViewer
         private System.Windows.Forms.ToolStripMenuItem showThumbnailToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.ToolStripStatusLabel executionStatus;
+        private System.Windows.Forms.ToolStripButton cancelQueryButton;
     }
 }
 

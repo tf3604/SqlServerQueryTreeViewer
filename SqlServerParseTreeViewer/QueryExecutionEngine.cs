@@ -21,6 +21,8 @@ namespace SqlServerParseTreeViewer
         private List<DataTable> _resultTables;
         private DataTable _optimizerInfoTable;
         private DataTable _transformationStatsTable;
+        private bool _isCancelled;
+        private Dal _dal;
 
         public EventHandler<SqlExecuteCompleteEventArgs> ExecuteComplete;
 
@@ -86,6 +88,7 @@ namespace SqlServerParseTreeViewer
         private void ExecuteAllSql()
         {
             Exception exception = null;
+            _isCancelled = false;
 
             try
             {
@@ -98,25 +101,38 @@ namespace SqlServerParseTreeViewer
 
                 using (Dal dal = new Dal(_connection))
                 {
-                    foreach (string sql in sqlBatches)
+                    _dal = dal;
+                    try
                     {
-                        _connection.InfoMessage += CaptureMessages;
-                        _connection.FireInfoMessageEventOnUserErrors = true;
-
-                        try
+                        foreach (string sql in sqlBatches)
                         {
-                            using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
+                            _connection.InfoMessage += CaptureMessages;
+                            _connection.FireInfoMessageEventOnUserErrors = true;
+
+                            try
                             {
-                                foreach (DataTable table in resultSet.Tables)
+                                using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
                                 {
-                                    _resultTables.Add(table.Copy());
+                                    foreach (DataTable table in resultSet.Tables)
+                                    {
+                                        _resultTables.Add(table.Copy());
+                                    }
                                 }
                             }
+                            finally
+                            {
+                                _connection.InfoMessage -= CaptureMessages;
+                            }
+
+                            if (_isCancelled)
+                            {
+                                break;
+                            }
                         }
-                        finally
-                        {
-                            _connection.InfoMessage -= CaptureMessages;
-                        }
+                    }
+                    finally
+                    {
+                        _dal = null;
                     }
                 }
 
@@ -132,7 +148,18 @@ namespace SqlServerParseTreeViewer
             {
                 SqlExecuteCompleteEventArgs args = new SqlExecuteCompleteEventArgs();
                 args.Exception = exception;
+                args.CancelledByUser = _isCancelled;
                 executeCompleteHandler(this, args);
+            }
+        }
+
+        public void CancelQuery()
+        {
+            _isCancelled = true;
+            Dal dal = _dal;
+            if (dal != null)
+            {
+                dal.Cancel();
             }
         }
 
