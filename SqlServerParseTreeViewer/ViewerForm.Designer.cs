@@ -72,9 +72,10 @@ namespace SqlServerParseTreeViewer
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.executeButton = new System.Windows.Forms.ToolStripButton();
+            this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.executionStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
+            this.timerLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -271,26 +272,6 @@ namespace SqlServerParseTreeViewer
             this.executeButton.Text = "Execute";
             this.executeButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
-            // statusBar
-            // 
-            this.statusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.statusBar.AutoSize = false;
-            this.statusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.statusBar.Dock = System.Windows.Forms.DockStyle.None;
-            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.executionStatus});
-            this.statusBar.Location = new System.Drawing.Point(0, 558);
-            this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(1124, 22);
-            this.statusBar.TabIndex = 3;
-            // 
-            // executionStatus
-            // 
-            this.executionStatus.Name = "executionStatus";
-            this.executionStatus.Size = new System.Drawing.Size(39, 17);
-            this.executionStatus.Text = "Ready";
-            // 
             // cancelQueryButton
             // 
             this.cancelQueryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -301,6 +282,35 @@ namespace SqlServerParseTreeViewer
             this.cancelQueryButton.Size = new System.Drawing.Size(47, 22);
             this.cancelQueryButton.Text = "Cancel";
             this.cancelQueryButton.Click += new System.EventHandler(this.CancelQueryButton_Click);
+            // 
+            // statusBar
+            // 
+            this.statusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.statusBar.AutoSize = false;
+            this.statusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.statusBar.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.executionStatus,
+            this.timerLabel});
+            this.statusBar.Location = new System.Drawing.Point(0, 558);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(1124, 22);
+            this.statusBar.TabIndex = 3;
+            // 
+            // executionStatus
+            // 
+            this.executionStatus.AutoSize = false;
+            this.executionStatus.Name = "executionStatus";
+            this.executionStatus.Size = new System.Drawing.Size(200, 17);
+            this.executionStatus.Text = "Ready";
+            this.executionStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // timerLabel
+            // 
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(70, 17);
+            this.timerLabel.Text = "00:00:00.000";
             // 
             // ViewerForm
             // 
@@ -355,6 +365,7 @@ namespace SqlServerParseTreeViewer
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.ToolStripStatusLabel executionStatus;
         private System.Windows.Forms.ToolStripButton cancelQueryButton;
+        private System.Windows.Forms.ToolStripStatusLabel timerLabel;
     }
 }
 

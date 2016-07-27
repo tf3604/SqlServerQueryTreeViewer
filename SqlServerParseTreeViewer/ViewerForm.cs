@@ -39,6 +39,8 @@ namespace SqlServerParseTreeViewer
 
         private ApplicationSqlConnection _connection;
         private QueryExecutionEngine _currentExecutionEngine = null;
+        private Timer _executionTimer;
+        private DateTime _executionStartTime;
 
         private TabPage _messagesTab;
         private RichTextBox _messagesTextBox;
@@ -154,6 +156,12 @@ namespace SqlServerParseTreeViewer
                 this.executionStatus.Text = "Executing query";
                 Cursor oldCursor = this.Cursor;
 
+                _executionTimer = new Timer();
+                _executionTimer.Interval = 50;
+                _executionTimer.Tick += ExecutionTimer_Tick;
+                _executionStartTime = DateTime.Now;
+                _executionTimer.Enabled = true;
+
                 try
                 {
                     this.Cursor = Cursors.WaitCursor;
@@ -174,6 +182,20 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        private void ExecutionTimer_Tick(object sender, EventArgs e)
+        {
+            ShowElapsedTime();
+        }
+
+        private void ShowElapsedTime()
+        {
+            DateTime now = DateTime.Now;
+            TimeSpan elapsedTime = now - _executionStartTime;
+            string displayTime = elapsedTime.ToString(@"hh\:mm\:ss\.fff");
+
+            timerLabel.Text = displayTime;
+        }
+
         private void OnExecuteComplete(object sender, SqlExecuteCompleteEventArgs e)
         {
             if (this.InvokeRequired)
@@ -190,6 +212,9 @@ namespace SqlServerParseTreeViewer
 
         private void DisplayResults(object sender, SqlExecuteCompleteEventArgs e)
         {
+            _executionTimer.Enabled = false;
+            ShowElapsedTime();
+
             if (e.Exception == null)
             {
                 DisplayNormalResults(sender, e);
