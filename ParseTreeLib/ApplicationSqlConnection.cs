@@ -11,17 +11,7 @@ namespace bkh.ParseTreeLib
     public class ApplicationSqlConnection : IDisposable
     {
         private SqlConnection _connection;        
-        private SqlInfoMessageEventHandler _infoMessage;
-
-        public event SqlInfoMessageEventHandler InfoMessage
-        {
-            add
-            {
-            }
-            remove
-            {
-            }
-        }
+        public SqlInfoMessageEventHandler InfoMessage;
 
         public ApplicationSqlConnection(SqlConnection connection)
         {
@@ -31,6 +21,7 @@ namespace bkh.ParseTreeLib
             }
 
             _connection = connection;
+            _connection.InfoMessage += InfoMessageInternal;
         }
 
         public SqlConnection Connection
@@ -75,6 +66,15 @@ namespace bkh.ParseTreeLib
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void InfoMessageInternal(object sender, SqlInfoMessageEventArgs e)
+        {
+            SqlInfoMessageEventHandler handler = InfoMessage;
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
         }
 
         private void Dispose(bool disposing)
