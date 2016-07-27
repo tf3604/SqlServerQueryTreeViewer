@@ -85,43 +85,53 @@ namespace SqlServerParseTreeViewer
 
         private void ExecuteAllSql()
         {
-            List<string> sqlBatches = SplitSqlIntoBatches(_sql);
-            _resultTables = new List<DataTable>();
-            _messages = new StringBuilder();
-            _outputMessages = new List<OutputMessage>();
+            Exception exception = null;
 
-            InitializeTrackers();
-
-            using (Dal dal = new Dal(_connection))
+            try
             {
-                foreach (string sql in sqlBatches)
-                {
-                    _connection.InfoMessage += CaptureMessages;
-                    _connection.FireInfoMessageEventOnUserErrors = true;
+                List<string> sqlBatches = SplitSqlIntoBatches(_sql);
+                _resultTables = new List<DataTable>();
+                _messages = new StringBuilder();
+                _outputMessages = new List<OutputMessage>();
 
-                    try
+                InitializeTrackers();
+
+                using (Dal dal = new Dal(_connection))
+                {
+                    foreach (string sql in sqlBatches)
                     {
-                        using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
+                        _connection.InfoMessage += CaptureMessages;
+                        _connection.FireInfoMessageEventOnUserErrors = true;
+
+                        try
                         {
-                            foreach (DataTable table in resultSet.Tables)
+                            using (DataSet resultSet = dal.ExecuteQueryMultipleResultSets(sql))
                             {
-                                _resultTables.Add(table.Copy());
+                                foreach (DataTable table in resultSet.Tables)
+                                {
+                                    _resultTables.Add(table.Copy());
+                                }
                             }
                         }
-                    }
-                    finally
-                    {
-                        _connection.InfoMessage -= CaptureMessages;
+                        finally
+                        {
+                            _connection.InfoMessage -= CaptureMessages;
+                        }
                     }
                 }
-            }
 
-            FinalizeTrackers();
+                FinalizeTrackers();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
 
             EventHandler<SqlExecuteCompleteEventArgs> executeCompleteHandler = this.ExecuteComplete;
             if (executeCompleteHandler != null)
             {
                 SqlExecuteCompleteEventArgs args = new SqlExecuteCompleteEventArgs();
+                args.Exception = exception;
                 executeCompleteHandler(this, args);
             }
         }

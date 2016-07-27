@@ -8,6 +8,10 @@ namespace SqlServerParseTreeViewer
 {
     internal class SqlExecuteCompleteEventArgs : EventArgs
     {
-        private Exception _exception;
+        public Exception Exception
+        {
+            get;
+            set;
+        }
     }
 }

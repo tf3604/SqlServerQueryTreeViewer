@@ -168,17 +168,7 @@ namespace SqlServerParseTreeViewer
             }
             catch (Exception ex)
             {
-                _messagesTextBox.SelectionStart = _messagesTextBox.TextLength;
-                _messagesTextBox.SelectionLength = 0;
-
-                _messagesTextBox.SelectionColor = Color.Red;
-                _messagesTextBox.AppendText(ex.ToString());
-
-                if (mainTabControl.Controls.Contains(_messagesTab) == false)
-                {
-                    mainTabControl.Controls.Add(_messagesTab);
-                }
-                mainTabControl.SelectedTab = _messagesTab;
+                DisplayException(ex);
             }
         }
 
@@ -195,6 +185,38 @@ namespace SqlServerParseTreeViewer
         }
 
         private void DisplayResults(object sender, SqlExecuteCompleteEventArgs e)
+        {
+            if (e.Exception == null)
+            {
+                DisplayNormalResults(sender, e);
+            }
+            else
+            {
+                DisplayExceptionResults(sender, e);
+            }
+        }
+
+        private void DisplayExceptionResults(object sender, SqlExecuteCompleteEventArgs e)
+        {
+            DisplayException(e.Exception);
+        }
+
+        private void DisplayException(Exception ex)
+        {
+            _messagesTextBox.SelectionStart = _messagesTextBox.TextLength;
+            _messagesTextBox.SelectionLength = 0;
+
+            _messagesTextBox.SelectionColor = Color.Red;
+            _messagesTextBox.AppendText(ex.ToString());
+
+            if (mainTabControl.Controls.Contains(_messagesTab) == false)
+            {
+                mainTabControl.Controls.Add(_messagesTab);
+            }
+            mainTabControl.SelectedTab = _messagesTab;
+        }
+
+        private void DisplayNormalResults(object sender, SqlExecuteCompleteEventArgs e)
         {
             string sqlOutput = _currentExecutionEngine.Messages;
 
