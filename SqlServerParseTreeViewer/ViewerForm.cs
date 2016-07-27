@@ -150,6 +150,7 @@ namespace SqlServerParseTreeViewer
 
                 this.executeButton.Enabled = false;
                 this.connectButton.Enabled = false;
+                this.executionStatus.Text = "Executing query";
                 Cursor oldCursor = this.Cursor;
 
                 try
@@ -214,6 +215,7 @@ namespace SqlServerParseTreeViewer
                 mainTabControl.Controls.Add(_messagesTab);
             }
             mainTabControl.SelectedTab = _messagesTab;
+            executionStatus.Text = "Unexpected error.";
         }
 
         private void DisplayNormalResults(object sender, SqlExecuteCompleteEventArgs e)
@@ -222,6 +224,7 @@ namespace SqlServerParseTreeViewer
 
             TabPage pageToBeActivated = _messagesTab;
             mainTabControl.TabPages.Add(_messagesTab);
+            bool hasError = false;
 
             foreach (OutputMessage message in _currentExecutionEngine.OutputMessages)
             {
@@ -231,6 +234,7 @@ namespace SqlServerParseTreeViewer
 
                 _messagesTextBox.SelectionColor = message.IsErrorText ? Color.Red : Color.Black;
                 _messagesTextBox.AppendText(text);
+                hasError ^= message.IsErrorText;
             }
 
             List<DataTable> resultTables = _currentExecutionEngine.ResultTables.ToList();
@@ -288,6 +292,14 @@ namespace SqlServerParseTreeViewer
 
             this.executeButton.Enabled = true;
             this.connectButton.Enabled = true;
+            if (hasError)
+            {
+                executionStatus.Text = "Query completed with errors.";
+            }
+            else
+            {
+                executionStatus.Text = "Query executed successfully.";
+            }
         }
 
         private long DisplayTablesOnTabPage(TabPage tabPage, List<DataTable> tables, Size gridSize)

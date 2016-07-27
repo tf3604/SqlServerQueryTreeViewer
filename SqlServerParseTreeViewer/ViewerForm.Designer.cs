@@ -66,16 +66,19 @@ namespace SqlServerParseTreeViewer
             this.recentQueriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.executeButton = new System.Windows.Forms.ToolStripButton();
-            this.showThumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.executionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -87,7 +90,7 @@ namespace SqlServerParseTreeViewer
             this.mainTabControl.Location = new System.Drawing.Point(0, 52);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(1124, 496);
+            this.mainTabControl.Size = new System.Drawing.Size(1124, 503);
             this.mainTabControl.TabIndex = 0;
             // 
             // tabScript
@@ -96,7 +99,7 @@ namespace SqlServerParseTreeViewer
             this.tabScript.Location = new System.Drawing.Point(4, 22);
             this.tabScript.Name = "tabScript";
             this.tabScript.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScript.Size = new System.Drawing.Size(1116, 470);
+            this.tabScript.Size = new System.Drawing.Size(1116, 477);
             this.tabScript.TabIndex = 0;
             this.tabScript.Text = "Script";
             this.tabScript.UseVisualStyleBackColor = true;
@@ -109,7 +112,7 @@ namespace SqlServerParseTreeViewer
             this.queryRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.queryRichTextBox.Location = new System.Drawing.Point(0, 0);
             this.queryRichTextBox.Name = "queryRichTextBox";
-            this.queryRichTextBox.Size = new System.Drawing.Size(1116, 470);
+            this.queryRichTextBox.Size = new System.Drawing.Size(1116, 481);
             this.queryRichTextBox.TabIndex = 0;
             this.queryRichTextBox.Text = "";
             this.queryRichTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryRichTextBox_KeyDown);
@@ -213,6 +216,13 @@ namespace SqlServerParseTreeViewer
             this.optionsToolStripMenuItem.Text = "&Options...";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
+            // showThumbnailToolStripMenuItem
+            // 
+            this.showThumbnailToolStripMenuItem.Name = "showThumbnailToolStripMenuItem";
+            this.showThumbnailToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.showThumbnailToolStripMenuItem.Text = "Show &Thumbnail ...";
+            this.showThumbnailToolStripMenuItem.Click += new System.EventHandler(this.ShowThumbnailToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -259,18 +269,32 @@ namespace SqlServerParseTreeViewer
             this.executeButton.Text = "Execute";
             this.executeButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
-            // showThumbnailToolStripMenuItem
+            // statusBar
             // 
-            this.showThumbnailToolStripMenuItem.Name = "showThumbnailToolStripMenuItem";
-            this.showThumbnailToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.showThumbnailToolStripMenuItem.Text = "Show &Thumbnail ...";
-            this.showThumbnailToolStripMenuItem.Click += new System.EventHandler(this.ShowThumbnailToolStripMenuItem_Click);
+            this.statusBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.statusBar.AutoSize = false;
+            this.statusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.statusBar.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.executionStatus});
+            this.statusBar.Location = new System.Drawing.Point(0, 558);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(1124, 22);
+            this.statusBar.TabIndex = 3;
+            // 
+            // executionStatus
+            // 
+            this.executionStatus.Name = "executionStatus";
+            this.executionStatus.Size = new System.Drawing.Size(39, 17);
+            this.executionStatus.Text = "Ready";
             // 
             // ViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1122, 546);
+            this.ClientSize = new System.Drawing.Size(1122, 578);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.menuStrip1);
@@ -285,6 +309,8 @@ namespace SqlServerParseTreeViewer
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusBar.ResumeLayout(false);
+            this.statusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,6 +339,8 @@ namespace SqlServerParseTreeViewer
         private System.Windows.Forms.ToolStripButton connectButton;
         private System.Windows.Forms.ToolStripButton executeButton;
         private System.Windows.Forms.ToolStripMenuItem showThumbnailToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusBar;
+        private System.Windows.Forms.ToolStripStatusLabel executionStatus;
     }
 }
 
