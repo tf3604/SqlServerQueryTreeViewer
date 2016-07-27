@@ -297,13 +297,13 @@ namespace SqlServerParseTreeViewer
 
             mainTabControl.SelectedTab = pageToBeActivated;
 
-            if (hasError)
-            {
-                executionStatus.Text = "Query completed with errors.";
-            }
-            else if (e.CancelledByUser)
+            if (e.CancelledByUser)                
             {
                 executionStatus.Text = "Query was cancelled by user.";
+            }
+            else if (hasError)
+            {
+                executionStatus.Text = "Query completed with errors.";
             }
             else
             {
