@@ -154,7 +154,6 @@ namespace SqlServerParseTreeViewer
                 this.connectButton.Enabled = false;
                 this.cancelQueryButton.Enabled = true;
                 this.executionStatus.Text = "Executing query";
-                Cursor oldCursor = this.Cursor;
 
                 _executionTimer = new Timer();
                 _executionTimer.Interval = 50;
@@ -162,19 +161,9 @@ namespace SqlServerParseTreeViewer
                 _executionStartTime = DateTime.Now;
                 _executionTimer.Enabled = true;
 
-                try
-                {
-                    this.Cursor = Cursors.WaitCursor;
-
-                    _currentExecutionEngine = new QueryExecutionEngine(_connection, sqlToExecute);
-                    _currentExecutionEngine.ExecuteComplete += OnExecuteComplete;
-                    _currentExecutionEngine.StartExecution();
-                }
-                finally
-                {
-                    this.Cursor = oldCursor;
-                }
-
+                _currentExecutionEngine = new QueryExecutionEngine(_connection, sqlToExecute);
+                _currentExecutionEngine.ExecuteComplete += OnExecuteComplete;
+                _currentExecutionEngine.StartExecution();
             }
             catch (Exception ex)
             {
