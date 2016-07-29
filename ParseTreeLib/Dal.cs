@@ -31,9 +31,16 @@ namespace bkh.ParseTreeLib
                 throw new ArgumentNullException(nameof(sql));
             }
 
-            using (SqlCommand command = GetCommand(sql, parameters))
+            try {
+                using (SqlCommand command = GetCommand(sql, parameters))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex) when (ex.Class == 11 && ex.Number == 0)
             {
-                command.ExecuteNonQuery();
+                // User cancelled query.
+                return;
             }
         }
 
@@ -69,6 +76,11 @@ namespace bkh.ParseTreeLib
                             throw;
                         }
                     }
+                }
+                catch (SqlException ex) when (ex.Class == 11 && ex.Number == 0)
+                {
+                    // User cancelled query.
+                    return new DataTable();
                 }
                 finally
                 {
