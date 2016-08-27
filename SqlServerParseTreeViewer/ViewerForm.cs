@@ -153,6 +153,8 @@ namespace SqlServerParseTreeViewer
                 this.executeButton.Enabled = false;
                 this.connectButton.Enabled = false;
                 this.cancelQueryButton.Enabled = true;
+                this.disconnectButton.Enabled = false;
+                this.disconnectToolStripMenuItem.Enabled = false;
                 this.executionStatus.Text = "Executing query";
 
                 _executionTimer = new Timer();
@@ -216,6 +218,8 @@ namespace SqlServerParseTreeViewer
             this.executeButton.Enabled = true;
             this.connectButton.Enabled = true;
             this.cancelQueryButton.Enabled = false;
+            this.disconnectButton.Enabled = true;
+            this.disconnectToolStripMenuItem.Enabled = true;
         }
 
         private void DisplayExceptionResults(object sender, SqlExecuteCompleteEventArgs e)
@@ -426,6 +430,9 @@ namespace SqlServerParseTreeViewer
                 {
                     _connection = connectForm.Connection;
                     SetTraceFlags();
+
+                    disconnectButton.Enabled = true;
+                    disconnectToolStripMenuItem.Enabled = true;
                     return true;
                 }
             }
@@ -913,6 +920,28 @@ namespace SqlServerParseTreeViewer
             {
                 executionEngine.CancelQuery();
             }
+        }
+
+        private void DisconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DisconnectDatabase();
+        }
+
+        private void DisconnectButton_Click(object sender, EventArgs e)
+        {
+            DisconnectDatabase();
+        }
+
+        private void DisconnectDatabase()
+        {
+            if (_connection != null)
+            {
+                _connection.Dispose();
+                _connection = null;
+            }
+
+            disconnectButton.Enabled = false;
+            disconnectToolStripMenuItem.Enabled = false;
         }
     }
 }
