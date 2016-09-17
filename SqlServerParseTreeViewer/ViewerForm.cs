@@ -45,6 +45,8 @@ namespace SqlServerParseTreeViewer
         private TabPage _messagesTab;
         private RichTextBox _messagesTextBox;
 
+        private bool _isInitializing = false;
+
         public ViewerForm()
         {
             InitializeComponent();
@@ -636,6 +638,8 @@ namespace SqlServerParseTreeViewer
                 }
             }
 
+            _isInitializing = true;
+
             if (ViewerSettings.Instance.CurrentQueryRtf != null)
             {
                 queryRichTextBox.Rtf = ViewerSettings.Instance.CurrentQueryRtf;
@@ -644,6 +648,18 @@ namespace SqlServerParseTreeViewer
             {
                 queryRichTextBox.Text = ViewerSettings.Instance.CurrentQuery ?? string.Empty;
             }
+
+            zoomComboBox.Items.Clear();
+            zoomComboBox.Items.Add(new ZoomLevel(.5));
+            zoomComboBox.Items.Add(new ZoomLevel(.75));
+            zoomComboBox.Items.Add(new ZoomLevel(1));
+            zoomComboBox.Items.Add(new ZoomLevel(1.5));
+            zoomComboBox.Items.Add(new ZoomLevel(2));
+            zoomComboBox.Items.Add(new ZoomLevel(4));
+
+            zoomComboBox.Text = "100%";
+
+            _isInitializing = false;
         }
 
         private void ViewerForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -942,6 +958,16 @@ namespace SqlServerParseTreeViewer
 
             disconnectButton.Enabled = false;
             disconnectToolStripMenuItem.Enabled = false;
+        }
+
+        private void ZoomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_isInitializing == false)
+            {
+                ZoomLevel zoom = zoomComboBox.SelectedItem as ZoomLevel;
+
+                queryRichTextBox.ZoomFactor = (float)zoom.ZoomFraction;
+            }
         }
     }
 }
