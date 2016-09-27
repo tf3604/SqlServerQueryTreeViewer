@@ -41,6 +41,7 @@ namespace SqlServerParseTreeViewer
         private QueryExecutionEngine _currentExecutionEngine = null;
         private Timer _executionTimer;
         private DateTime _executionStartTime;
+        private List<string> _currentDatabaseList;
 
         private TabPage _messagesTab;
         private RichTextBox _messagesTextBox;
@@ -201,6 +202,7 @@ namespace SqlServerParseTreeViewer
             }
 
             _currentExecutionEngine = null;
+            UpdateDatabaseContext();
         }
 
         private void DisplayResults(object sender, SqlExecuteCompleteEventArgs e)
@@ -432,6 +434,7 @@ namespace SqlServerParseTreeViewer
                 {
                     _connection = connectForm.Connection;
                     SetTraceFlags();
+                    UpdateDatabaseContext();
 
                     disconnectButton.Enabled = true;
                     disconnectToolStripMenuItem.Enabled = true;
@@ -439,6 +442,69 @@ namespace SqlServerParseTreeViewer
                 }
             }
             return false;
+        }
+
+        private void UpdateDatabaseContext()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(UpdateDatabaseContextOnCreatorThread));
+            }
+            else
+            {
+                UpdateDatabaseContextOnCreatorThread();
+            }
+        }
+
+        private void UpdateDatabaseContextOnCreatorThread()
+        {
+            if (_connection == null)
+            {
+                return;
+            }
+
+            try
+            {
+                _isInitializing = true;
+                List<string> databaseList = GetCurrentDatabaseList();
+                if (databaseList != null && databaseList.Count > 0)
+                {
+                    if (Utilities.AreListsEqual(databaseList, _currentDatabaseList) == false)
+                    {
+                        _currentDatabaseList = databaseList;
+
+                        dbContextComboBox.Items.Clear();
+                        dbContextComboBox.Items.AddRange(_currentDatabaseList.ToArray());
+                    }
+                }
+
+                dbContextComboBox.Text = _connection.Connection.Database;
+            }
+            finally
+            {
+                _isInitializing = false;
+            }
+        }
+
+        private List<string> GetCurrentDatabaseList()
+        {
+            List<string> databaseList = new List<string>();
+
+            using (Dal dal = new Dal(_connection))
+            {
+                string sql = @"select name from sys.databases;";
+                using (DataTable databaseTable = dal.ExecuteQueryOneResultSet(sql))
+                {
+                    foreach (DataRow row in databaseTable.Rows)
+                    {
+                        string databaseName = row["name"] as string;
+                        databaseList.Add(databaseName);
+                    }
+                }
+            }
+
+            databaseList.Sort();
+            return databaseList;
         }
 
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -967,6 +1033,19 @@ namespace SqlServerParseTreeViewer
                 ZoomLevel zoom = zoomComboBox.SelectedItem as ZoomLevel;
 
                 queryRichTextBox.ZoomFactor = (float)zoom.ZoomFraction;
+            }
+        }
+
+        private void DbContextComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_isInitializing == false &&
+                _connection != null)
+            {
+                string newDatabaseContext = dbContextComboBox.SelectedItem as string;
+                if (newDatabaseContext != _connection.Connection.Database)
+                {
+                    _connection.Connection.ChangeDatabase(newDatabaseContext);
+                }
             }
         }
     }

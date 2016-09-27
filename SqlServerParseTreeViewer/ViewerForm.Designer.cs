@@ -76,9 +76,10 @@ namespace SqlServerParseTreeViewer
             this.executeButton = new System.Windows.Forms.ToolStripButton();
             this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.zoomComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.executionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.zoomComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.dbContextComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -220,7 +221,7 @@ namespace SqlServerParseTreeViewer
             this.optionsToolStripMenuItem,
             this.showThumbnailToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // optionsToolStripMenuItem
@@ -257,6 +258,7 @@ namespace SqlServerParseTreeViewer
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectButton,
             this.disconnectButton,
+            this.dbContextComboBox,
             this.executeButton,
             this.cancelQueryButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
@@ -323,6 +325,14 @@ namespace SqlServerParseTreeViewer
             this.statusBar.Size = new System.Drawing.Size(1124, 22);
             this.statusBar.TabIndex = 3;
             // 
+            // zoomComboBox
+            // 
+            this.zoomComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.zoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.zoomComboBox.Name = "zoomComboBox";
+            this.zoomComboBox.Size = new System.Drawing.Size(75, 22);
+            this.zoomComboBox.SelectedIndexChanged += new System.EventHandler(this.ZoomComboBox_SelectedIndexChanged);
+            // 
             // executionStatus
             // 
             this.executionStatus.AutoSize = false;
@@ -337,13 +347,12 @@ namespace SqlServerParseTreeViewer
             this.timerLabel.Size = new System.Drawing.Size(70, 17);
             this.timerLabel.Text = "00:00:00.000";
             // 
-            // zoomComboBox
+            // dbContextComboBox
             // 
-            this.zoomComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.zoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.zoomComboBox.Name = "zoomComboBox";
-            this.zoomComboBox.Size = new System.Drawing.Size(75, 22);
-            this.zoomComboBox.SelectedIndexChanged += new System.EventHandler(this.ZoomComboBox_SelectedIndexChanged);
+            this.dbContextComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dbContextComboBox.Name = "dbContextComboBox";
+            this.dbContextComboBox.Size = new System.Drawing.Size(121, 25);
+            this.dbContextComboBox.SelectedIndexChanged += new System.EventHandler(this.DbContextComboBox_SelectedIndexChanged);
             // 
             // ViewerForm
             // 
@@ -402,6 +411,7 @@ namespace SqlServerParseTreeViewer
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton disconnectButton;
         private System.Windows.Forms.ToolStripComboBox zoomComboBox;
+        private System.Windows.Forms.ToolStripComboBox dbContextComboBox;
     }
 }
 

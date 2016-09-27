@@ -78,5 +78,34 @@ namespace bkh.ParseTreeLib
                 return clone;
             }
         }
+
+        public static bool AreListsEqual(List<string> list1, List<string> list2)
+        {
+            if (list1 == null && list2 == null)
+            {
+                return true;
+            }
+
+            if ((list1 != null && list2 == null) ||
+                (list1 == null && list2 != null))
+            {
+                return false;
+            }
+
+            if (list1.Count != list2.Count)
+            {
+                return false;
+            }
+
+            for (int index = 0; index < list1.Count; index++)
+            {
+                if (list1[index] != list2[index])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
