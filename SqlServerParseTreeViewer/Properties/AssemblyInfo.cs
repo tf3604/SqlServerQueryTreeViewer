@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SqlServerParseTreeViewer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("tf3604.com")]
+[assembly: AssemblyCompany("tf3604.com/ssptv")]
 [assembly: AssemblyProduct("SqlServerParseTreeViewer")]
 [assembly: AssemblyCopyright("Copyright © Brian Hansen 2016")]
 [assembly: AssemblyTrademark("")]
@@ -48,5 +48,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.5.*")]
+[assembly: AssemblyVersion("0.6.*")]
 
