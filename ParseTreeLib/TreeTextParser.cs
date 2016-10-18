@@ -113,7 +113,20 @@ namespace bkh.ParseTreeLib
                 trees.Add(tree);
             }
 
+            SetTreeOrder(trees);
+
             return new ReadOnlyCollection<SqlParseTree>(trees);
+        }
+
+        private static void SetTreeOrder(List<SqlParseTree> trees)
+        {
+            string inputTreeTitle = "Input Tree";
+            SqlParseTree inputTree = trees.FirstOrDefault(t => t.TreeDescription == inputTreeTitle);
+            if (inputTree != null)
+            {
+                trees.Remove(inputTree);
+                trees.Insert(0, inputTree);
+            }
         }
 
         private static string ExtractTreeDescription(string parseLine)
