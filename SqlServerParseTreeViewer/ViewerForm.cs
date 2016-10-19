@@ -815,6 +815,33 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        private void MainTabControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            bool isF6 = e.KeyCode == Keys.F6 &&
+                e.Alt == false &&
+                e.Control == false &&
+                e.Shift == false;
+            bool isShiftF6 = e.KeyCode == Keys.F6 &&
+                e.Alt == false &&
+                e.Control == false &&
+                e.Shift == true;
+
+            if (isF6)
+            {
+                int currentTabIndex = mainTabControl.SelectedIndex;
+                int nextTabIndex = currentTabIndex + 1 >= mainTabControl.TabCount ? 0 : currentTabIndex + 1;
+                mainTabControl.SelectedIndex = nextTabIndex;
+                e.Handled = true;
+            }
+            else if (isShiftF6)
+            {
+                int currentTabIndex = mainTabControl.SelectedIndex;
+                int previousTabIndex = currentTabIndex - 1 < 0 ? mainTabControl.TabCount - 1 : currentTabIndex - 1;
+                mainTabControl.SelectedIndex = previousTabIndex;
+                e.Handled = true;
+            }
+        }
+
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try

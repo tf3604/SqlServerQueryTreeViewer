@@ -73,13 +73,13 @@ namespace SqlServerParseTreeViewer
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.disconnectButton = new System.Windows.Forms.ToolStripButton();
+            this.dbContextComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.executeButton = new System.Windows.Forms.ToolStripButton();
             this.cancelQueryButton = new System.Windows.Forms.ToolStripButton();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.zoomComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.executionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.dbContextComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.mainTabControl.SuspendLayout();
             this.tabScript.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -98,6 +98,7 @@ namespace SqlServerParseTreeViewer
             this.mainTabControl.SelectedIndex = 0;
             this.mainTabControl.Size = new System.Drawing.Size(1124, 503);
             this.mainTabControl.TabIndex = 0;
+            this.mainTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainTabControl_KeyDown);
             // 
             // tabScript
             // 
@@ -288,6 +289,13 @@ namespace SqlServerParseTreeViewer
             this.disconnectButton.Text = "Disconnect";
             this.disconnectButton.Click += new System.EventHandler(this.DisconnectButton_Click);
             // 
+            // dbContextComboBox
+            // 
+            this.dbContextComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dbContextComboBox.Name = "dbContextComboBox";
+            this.dbContextComboBox.Size = new System.Drawing.Size(121, 25);
+            this.dbContextComboBox.SelectedIndexChanged += new System.EventHandler(this.DbContextComboBox_SelectedIndexChanged);
+            // 
             // executeButton
             // 
             this.executeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -346,13 +354,6 @@ namespace SqlServerParseTreeViewer
             this.timerLabel.Name = "timerLabel";
             this.timerLabel.Size = new System.Drawing.Size(70, 17);
             this.timerLabel.Text = "00:00:00.000";
-            // 
-            // dbContextComboBox
-            // 
-            this.dbContextComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.dbContextComboBox.Name = "dbContextComboBox";
-            this.dbContextComboBox.Size = new System.Drawing.Size(121, 25);
-            this.dbContextComboBox.SelectedIndexChanged += new System.EventHandler(this.DbContextComboBox_SelectedIndexChanged);
             // 
             // ViewerForm
             // 
