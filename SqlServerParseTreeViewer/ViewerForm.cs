@@ -825,6 +825,14 @@ namespace SqlServerParseTreeViewer
                 e.Alt == false &&
                 e.Control == false &&
                 e.Shift == true;
+            bool isF8 = e.KeyCode == Keys.F8 &&
+                e.Alt == false &&
+                e.Control == false &&
+                e.Shift == false;
+            bool isShiftF8 = e.KeyCode == Keys.F8 &&
+                e.Alt == false &&
+                e.Control == false &&
+                e.Shift == true;
 
             if (isF6)
             {
@@ -839,6 +847,30 @@ namespace SqlServerParseTreeViewer
                 int previousTabIndex = currentTabIndex - 1 < 0 ? mainTabControl.TabCount - 1 : currentTabIndex - 1;
                 mainTabControl.SelectedIndex = previousTabIndex;
                 e.Handled = true;
+            }
+            else if (isF8)
+            {
+                TabPage currentTab = mainTabControl.SelectedTab;
+                ParseTreeTab treeTab = FindFirstControlOfType<ParseTreeTab>(currentTab.Controls);
+                if (treeTab != null)
+                {
+                    int currentTabIndex = treeTab.TreeTabControl.SelectedIndex;
+                    int nextTabIndex = currentTabIndex + 1 >= treeTab.TreeTabControl.TabCount ? 0 : currentTabIndex + 1;
+                    treeTab.TreeTabControl.SelectedIndex = nextTabIndex;
+                    e.Handled = true;
+                }
+            }
+            else if (isShiftF8)
+            {
+                TabPage currentTab = mainTabControl.SelectedTab;
+                ParseTreeTab treeTab = FindFirstControlOfType<ParseTreeTab>(currentTab.Controls);
+                if (treeTab != null)
+                {
+                    int currentTabIndex = treeTab.TreeTabControl.SelectedIndex;
+                    int previousTabIndex = currentTabIndex - 1 < 0 ? treeTab.TreeTabControl.TabCount - 1 : currentTabIndex - 1;
+                    treeTab.TreeTabControl.SelectedIndex = previousTabIndex;
+                    e.Handled = true;
+                }
             }
         }
 

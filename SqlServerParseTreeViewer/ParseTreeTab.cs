@@ -68,6 +68,14 @@ namespace SqlServerParseTreeViewer
             }
         }
 
+        public TabControl TreeTabControl
+        {
+            get
+            {
+                return treeTab;
+            }
+        }
+
         public bool IsMemo
         {
             set
