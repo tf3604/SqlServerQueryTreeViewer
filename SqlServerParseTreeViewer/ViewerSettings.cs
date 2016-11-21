@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -165,6 +166,13 @@ namespace SqlServerParseTreeViewer
 
         [DataMember]
         public bool TrackTransformationStats
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public TreeRenderStyle TreeRenderStyle
         {
             get;
             set;
@@ -317,6 +325,19 @@ namespace SqlServerParseTreeViewer
             if (_recentQueries == null)
             {
                 _recentQueries = new List<SubmittedQueryInfo>();
+            }
+
+            if (TreeRenderStyle == TreeRenderStyle.NotSpecified)
+            {
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                if (version.Major == 0 && version.Minor < 7)
+                {
+                    TreeRenderStyle = TreeRenderStyle.VerticalBalancedTree;
+                }
+                else
+                {
+                    TreeRenderStyle = TreeRenderStyle.PlanStyleHorizontalTree;
+                }
             }
         }
 

@@ -35,8 +35,8 @@ namespace SqlServerParseTreeViewer
 
         private void InfoTrackerUserControl_Load(object sender, EventArgs e)
         {
-            optimizerInfoCheckBox.Checked = ViewerSettings.Instance.TrackOptimizerInfo;
-            transformationStatsCheckBox.Checked = ViewerSettings.Instance.TrackTransformationStats;
+            optimizerInfoCheckBox.Checked = ViewerSettings.Clone.TrackOptimizerInfo;
+            transformationStatsCheckBox.Checked = ViewerSettings.Clone.TrackTransformationStats;
         }
 
         private void OptimizerInfoCheckBox_CheckedChanged(object sender, EventArgs e)

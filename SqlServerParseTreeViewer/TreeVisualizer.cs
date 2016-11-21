@@ -42,6 +42,27 @@ namespace SqlServerParseTreeViewer
 
         public static Bitmap Render(SqlParseTree tree, out List<TreeNodeIcon> nodeIcons)
         {
+            if (ViewerSettings.Instance.TreeRenderStyle == TreeRenderStyle.VerticalBalancedTree)
+            {
+                return RenderVerticalBalancedTree(tree, out nodeIcons);
+            }
+            else if (ViewerSettings.Instance.TreeRenderStyle == TreeRenderStyle.PlanStyleHorizontalTree)
+            {
+                return RenderPlanStyleHorizontalTree(tree, out nodeIcons);
+            }
+            else
+            {
+                throw new ApplicationException($"Internal error: Unknown tree render style {ViewerSettings.Instance.TreeRenderStyle}");
+            }
+        }
+
+        public static Bitmap RenderPlanStyleHorizontalTree(SqlParseTree tree, out List<TreeNodeIcon> nodeIcons)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Bitmap RenderVerticalBalancedTree(SqlParseTree tree, out List<TreeNodeIcon> nodeIcons)
+        {
             if (tree == null)
             {
                 throw new ArgumentNullException(nameof(tree));

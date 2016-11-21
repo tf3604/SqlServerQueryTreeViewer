@@ -41,7 +41,8 @@ namespace SqlServerParseTreeViewer
             {
                 new OptionsPage("Counters", new InfoTrackerUserControl()),
                 new OptionsPage("Trace Flags", new TraceFlagUserControl()),
-                new OptionsPage("Operator Colors", new OperatorColorsUserControl())
+                new OptionsPage("Operator Colors", new OperatorColorsUserControl()),
+                new OptionsPage("Render Style", new RenderStyleUserControl())
             };
 
             this.pagesListBox.Items.Clear();

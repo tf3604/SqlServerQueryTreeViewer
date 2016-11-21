@@ -118,6 +118,12 @@
     <Compile Include="RecentQueriesForm.Designer.cs">
       <DependentUpon>RecentQueriesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RenderStyleUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RenderStyleUserControl.Designer.cs">
+      <DependentUpon>RenderStyleUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShowThumbnailForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +145,7 @@
       <DependentUpon>TraceFlagUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TransformationStatsTracker.cs" />
+    <Compile Include="TreeRenderStyle.cs" />
     <Compile Include="TreeVisualizer.cs" />
     <Compile Include="ViewerForm.cs">
       <SubType>Form</SubType>
@@ -173,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RecentQueriesForm.resx">
       <DependentUpon>RecentQueriesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RenderStyleUserControl.resx">
+      <DependentUpon>RenderStyleUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShowThumbnailForm.resx">
       <DependentUpon>ShowThumbnailForm.cs</DependentUpon>
