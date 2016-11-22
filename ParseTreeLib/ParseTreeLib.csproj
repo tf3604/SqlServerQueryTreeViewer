@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="ApplicationSqlConnection.cs" />
     <Compile Include="Dal.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MemoNodeIcon.cs" />
     <Compile Include="MemoTextParser.cs" />
     <Compile Include="NodeIcon.cs" />

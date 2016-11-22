@@ -4,10 +4,10 @@
 //  documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
 //  the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
 //  and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-    
+
 //  The above copyright notice and this permission notice shall be included in all copies or substantial portions 
 //  of the Software.
-    
+
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
 //  TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
 //  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
@@ -16,73 +16,26 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace bkh.ParseTreeLib
 {
-    public class TreeNodeIcon : NodeIcon
+    public static class ExtensionMethods
     {
-        public TreeNodeIcon()
+        public static int GetWidth(this List<TreeNodeIcon> icons)
         {
-            this.Children = new List<TreeNodeIcon>();
+            int left = icons.Min(i => i.X + i.Width);
+            int right = icons.Max(i => i.X + i.Width);
+            return right - left;
         }
 
-        public SqlParseTreeNode Node
+        public static int GetHeight(this List<TreeNodeIcon> icons)
         {
-            get;
-            set;
-        }
-
-        public TreeNodeIcon Parent
-        {
-            get;
-            set;
-        }
-
-        public List<TreeNodeIcon> Children
-        {
-            get;
-            set;
-        }
-
-        public bool IsLeafNode
-        {
-            get
-            {
-                return this.Node.Children.Count == 0;
-            }
-        }
-
-        public int DescendantWidth
-        {
-            get;
-            set;
-        }
-
-        public string Text
-        {
-            get;
-            set;
-        }
-
-        public Rectangle TextRectangle
-        {
-            get;
-            set;
-        }
-
-        public Rectangle IconRectangle
-        {
-            get;
-            set;
-        }
-
-        public override string ToString()
-        {
-            return Node.ToString();
+            int top = icons.Min(i => i.Y + i.Height);
+            int bottom = icons.Max(i => i.Y + i.Height);
+            return bottom - top;
         }
     }
 }
