@@ -111,6 +111,7 @@
     <Compile Include="ParseTreeTab.Designer.cs">
       <DependentUpon>ParseTreeTab.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlanStyleHorizontalTreeVisualizer.cs" />
     <Compile Include="QueryExecutionEngine.cs" />
     <Compile Include="RecentQueriesForm.cs">
       <SubType>Form</SubType>
@@ -147,6 +148,7 @@
     <Compile Include="TransformationStatsTracker.cs" />
     <Compile Include="TreeRenderStyle.cs" />
     <Compile Include="TreeVisualizer.cs" />
+    <Compile Include="VerticalBalancedTreeVisualizer.cs" />
     <Compile Include="ViewerForm.cs">
       <SubType>Form</SubType>
     </Compile>

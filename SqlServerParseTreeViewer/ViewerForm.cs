@@ -68,7 +68,8 @@ namespace SqlServerParseTreeViewer
             subTab.Size = tab.Size;
 
             List<TreeNodeIcon> treeNodeIcons;
-            Bitmap bitmap = TreeVisualizer.Render(tree, out treeNodeIcons);
+            TreeVisualizer treeVisualizer = TreeVisualizer.Create();
+            Bitmap bitmap = treeVisualizer.Render(tree, out treeNodeIcons);
             subTab.DrawingSurface.Image = bitmap;
             subTab.TreeText = tree.InnerTreeText;
             subTab.SetIcons(treeNodeIcons.ConvertAll(i => i as NodeIcon));
