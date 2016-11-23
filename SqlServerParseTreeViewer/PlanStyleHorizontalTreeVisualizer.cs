@@ -32,6 +32,8 @@ namespace SqlServerParseTreeViewer
         private const int _interIconHorizontalSpacing = 50;
         private const int _interIconVerticalSpacing = 30;
         private const int _iconToTextSpacing = 5;
+        private const int _arrowHorizontalSpacing = 10;
+        private const int _arrowVerticalSpacing = 5;
         private const int _leftMargin = 5;
         private const int _rightMargin = 5;
         private const int _topMargin = 5;
@@ -76,6 +78,31 @@ namespace SqlServerParseTreeViewer
                 {
                     graphics.DrawRectangle(Pens.Black, icon.IconRectangle);
                     graphics.DrawString(icon.Text, _textFont, Brushes.Black, icon.TextRectangle);
+
+                    // Draw connectors between icons
+                    if (icon.Children.Count > 0)
+                    {
+                        int arrowLeft = icon.IconRectangle.Left + icon.IconRectangle.Width + _arrowHorizontalSpacing;
+                        int firstArrowTop = (icon.IconRectangle.Top + icon.IconRectangle.Bottom) / 2 - _arrowVerticalSpacing * (icon.Children.Count - 1) / 2;
+                        int arrowTop = firstArrowTop;
+                        int centerAdjustment = _arrowHorizontalSpacing * icon.Children.Count / 2;
+                        bool isFirst = true;
+
+                        foreach (var childIcon in icon.Children)
+                        {
+                            int arrowRight = childIcon.IconRectangle.Left - _arrowHorizontalSpacing;
+                            int arrowBottom = isFirst ? firstArrowTop : (childIcon.IconRectangle.Top + childIcon.IconRectangle.Bottom) / 2;
+                            int arrowHorizontalCenter = (arrowLeft + arrowRight) / 2 + centerAdjustment;
+
+                            graphics.DrawLine(Pens.Black, arrowLeft, arrowTop, arrowHorizontalCenter, arrowTop);
+                            graphics.DrawLine(Pens.Black, arrowHorizontalCenter, arrowTop, arrowHorizontalCenter, arrowBottom);
+                            graphics.DrawLine(Pens.Black, arrowHorizontalCenter, arrowBottom, arrowRight, arrowBottom);
+
+                            isFirst = false;
+                            arrowTop += _arrowVerticalSpacing;
+                            centerAdjustment -= _arrowHorizontalSpacing;
+                        }
+                    }
                 }
             }
 
@@ -126,7 +153,7 @@ namespace SqlServerParseTreeViewer
             icon.Height = _iconHeight + _iconToTextSpacing + (int)textSize.Height;
             icon.Node = node;
             icon.Text = nodeText;
-            icon.TextRectangle = new Rectangle(left + (icon.Width - (int)textSize.Width) / 2, top + _iconHeight + _iconToTextSpacing, (int)textSize.Width, (int)textSize.Height);
+            icon.TextRectangle = new Rectangle(left + (icon.Width - (int)textSize.Width) / 2, top + _iconHeight + _iconToTextSpacing, (int)textSize.Width + 2, (int)textSize.Height + 2);
             icon.IconRectangle = new Rectangle(left + (icon.Width - _iconWidth) / 2, top, _iconWidth, _iconHeight);
 
             return icon;
