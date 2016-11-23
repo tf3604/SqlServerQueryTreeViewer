@@ -32,8 +32,8 @@ namespace SqlServerParseTreeViewer
         private const int _interIconHorizontalSpacing = 50;
         private const int _interIconVerticalSpacing = 30;
         private const int _iconToTextSpacing = 5;
-        private const int _arrowHorizontalSpacing = 10;
-        private const int _arrowVerticalSpacing = 5;
+        private const int _connectorHorizontalSpacing = 10;
+        private const int _connectorVerticalSpacing = 5;
         private const int _leftMargin = 5;
         private const int _rightMargin = 5;
         private const int _topMargin = 5;
@@ -82,15 +82,21 @@ namespace SqlServerParseTreeViewer
                     // Draw connectors between icons
                     if (icon.Children.Count > 0)
                     {
-                        int arrowLeft = icon.IconRectangle.Left + icon.IconRectangle.Width + _arrowHorizontalSpacing;
-                        int firstArrowTop = (icon.IconRectangle.Top + icon.IconRectangle.Bottom) / 2 - _arrowVerticalSpacing * (icon.Children.Count - 1) / 2;
+                        int arrowLeft = icon.IconRectangle.Left + icon.IconRectangle.Width + _connectorHorizontalSpacing;
+                        int firstArrowTop = (icon.IconRectangle.Top + icon.IconRectangle.Bottom) / 2 - _connectorVerticalSpacing * (icon.Children.Count - 1) / 2;
                         int arrowTop = firstArrowTop;
-                        int centerAdjustment = _arrowHorizontalSpacing * icon.Children.Count / 2;
+
+                        if (arrowTop + _connectorVerticalSpacing * (icon.Children.Count - 1) > icon.IconRectangle.Bottom)
+                        {
+                            arrowLeft = Math.Max(arrowLeft, icon.TextRectangle.Left + icon.TextRectangle.Width + _connectorHorizontalSpacing);
+                        }
+
+                        int centerAdjustment = _connectorHorizontalSpacing * icon.Children.Count / 2;
                         bool isFirst = true;
 
                         foreach (var childIcon in icon.Children)
                         {
-                            int arrowRight = childIcon.IconRectangle.Left - _arrowHorizontalSpacing;
+                            int arrowRight = childIcon.IconRectangle.Left - _connectorHorizontalSpacing;
                             int arrowBottom = isFirst ? firstArrowTop : (childIcon.IconRectangle.Top + childIcon.IconRectangle.Bottom) / 2;
                             int arrowHorizontalCenter = (arrowLeft + arrowRight) / 2 + centerAdjustment;
 
@@ -99,8 +105,8 @@ namespace SqlServerParseTreeViewer
                             graphics.DrawLine(Pens.Black, arrowHorizontalCenter, arrowBottom, arrowRight, arrowBottom);
 
                             isFirst = false;
-                            arrowTop += _arrowVerticalSpacing;
-                            centerAdjustment -= _arrowHorizontalSpacing;
+                            arrowTop += _connectorVerticalSpacing;
+                            centerAdjustment -= _connectorHorizontalSpacing;
                         }
                     }
                 }
@@ -112,19 +118,29 @@ namespace SqlServerParseTreeViewer
         private List<TreeNodeIcon> PositionNodes(SqlParseTree tree)
         {
             List<TreeNodeIcon> nodeIcons = PositionSubtree(tree.RootNode, _leftMargin, _topMargin);
-
-            // TODO: Normalize positions
             return nodeIcons;
         }
 
         private List<TreeNodeIcon> PositionSubtree(SqlParseTreeNode head, int top, int left)
         {
             List<TreeNodeIcon> icons = new List<TreeNodeIcon>();
+
+            int originalTop = top;
+            //int adjust = _connectorVerticalSpacing * head.Children.Count / 2 - _interIconVerticalSpacing;
+            int firstArrowTop = (2 * top + _iconHeight) / 2 - _connectorVerticalSpacing * (head.Children.Count - 1) / 2;
+            if (top > firstArrowTop)
+            {
+                top += (top - firstArrowTop) + _iconHeight / 2;
+            }
+
             TreeNodeIcon icon = PositionNode(head, top, left);
             icons.Add(icon);
 
-            int newLeft = left + icon.Width + _interIconHorizontalSpacing;
-            int newTop = top;
+            int horizontalSpacing = Math.Max(_interIconHorizontalSpacing, _connectorHorizontalSpacing * head.Children.Count);
+            int newLeft = left + icon.Width + horizontalSpacing;
+            //int newTop = originalTop;
+            int altTop = (icon.IconRectangle.Top + icon.IconRectangle.Bottom) / 2 - _connectorVerticalSpacing * (icon.Children.Count - 1) / 2;
+            int newTop = Math.Min(originalTop, altTop);
 
             foreach (SqlParseTreeNode child in head.Children)
             {
