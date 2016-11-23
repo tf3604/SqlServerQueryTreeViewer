@@ -69,6 +69,15 @@ namespace SqlServerParseTreeViewer
             int height = _topMargin + nodeIcons.GetHeight() + _bottomMargin;
 
             Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.FillRectangle(Brushes.White, 0, 0, width, height);
+                foreach (TreeNodeIcon icon in nodeIcons)
+                {
+                    graphics.DrawRectangle(Pens.Black, icon.IconRectangle);
+                    graphics.DrawString(icon.Text, _textFont, Brushes.Black, icon.TextRectangle);
+                }
+            }
 
             return bitmap;
         }
@@ -84,50 +93,22 @@ namespace SqlServerParseTreeViewer
         private List<TreeNodeIcon> PositionSubtree(SqlParseTreeNode head, int top, int left)
         {
             List<TreeNodeIcon> icons = new List<TreeNodeIcon>();
-
-            //// Find the right-most leaf node.
-            //SqlParseTreeNode currentNode = head;
-            //while (currentNode.Children.Count > 0)
-            //{
-            //    currentNode = currentNode.Children[currentNode.Children.Count - 1];
-            //}
-
-            //// Position it
-            //TreeNodeIcon icon = PositionNode(currentNode, top, left);
-            //icons.Add(icon);
-
             TreeNodeIcon icon = PositionNode(head, top, left);
-
-            //while (currentNode.Parent != null &&
-            //    currentNode != head)
-            //{
-            //    SqlParseTreeNode previousNode = currentNode;
-            //    currentNode = currentNode.Parent;
-
-            //    List<TreeNodeIcon> parentIcons = PositionSubtree(currentNode, 0, 0);
-
-            //    // Position other children of previous node
-            //    List<SqlParseTreeNode> siblings = currentNode.Children.Where(n => n != previousNode).ToList();
-            //    foreach (SqlParseTreeNode node in siblings)
-            //    {
-            //        // Position it
-            //    }
-
-            //    // Position currentNode;
-            //}
+            icons.Add(icon);
 
             int newLeft = left + icon.Width + _interIconHorizontalSpacing;
-            int newTop = top + icon.Height + _interIconVerticalSpacing;
+            int newTop = top;
 
             foreach (SqlParseTreeNode child in head.Children)
             {
-                List<TreeNodeIcon> childNodes = PositionSubtree(child, newTop, newLeft);
-                if (childNodes.Count > 0)
+                List<TreeNodeIcon> childIcons = PositionSubtree(child, newTop, newLeft);
+                if (childIcons.Count > 0)
                 {
-                    childNodes[0].Parent = icon;
-                    icon.Children.Add(childNodes[0]);
+                    childIcons[0].Parent = icon;
+                    icon.Children.Add(childIcons[0]);
                 }
-                newTop += childNodes.GetHeight();
+                icons.AddRange(childIcons);
+                newTop += childIcons.GetHeight() + _interIconVerticalSpacing;
             }
 
             return icons;
@@ -145,8 +126,8 @@ namespace SqlServerParseTreeViewer
             icon.Height = _iconHeight + _iconToTextSpacing + (int)textSize.Height;
             icon.Node = node;
             icon.Text = nodeText;
-            icon.TextRectangle = new Rectangle((icon.Width - (int)textSize.Width) / 2, _iconHeight + _iconToTextSpacing, (int)textSize.Width, (int)textSize.Height);
-            icon.IconRectangle = new Rectangle((icon.Width - _iconWidth) / 2, 0, _iconWidth, _iconHeight);
+            icon.TextRectangle = new Rectangle(left + (icon.Width - (int)textSize.Width) / 2, top + _iconHeight + _iconToTextSpacing, (int)textSize.Width, (int)textSize.Height);
+            icon.IconRectangle = new Rectangle(left + (icon.Width - _iconWidth) / 2, top, _iconWidth, _iconHeight);
 
             return icon;
         }

@@ -26,14 +26,22 @@ namespace bkh.ParseTreeLib
     {
         public static int GetWidth(this List<TreeNodeIcon> icons)
         {
-            int left = icons.Min(i => i.X + i.Width);
+            if (icons.Count == 0)
+            {
+                return 0;
+            }
+            int left = icons.Min(i => i.X);
             int right = icons.Max(i => i.X + i.Width);
             return right - left;
         }
 
         public static int GetHeight(this List<TreeNodeIcon> icons)
         {
-            int top = icons.Min(i => i.Y + i.Height);
+            if (icons.Count == 0)
+            {
+                return 0;
+            }
+            int top = icons.Min(i => i.Y);
             int bottom = icons.Max(i => i.Y + i.Height);
             return bottom - top;
         }
