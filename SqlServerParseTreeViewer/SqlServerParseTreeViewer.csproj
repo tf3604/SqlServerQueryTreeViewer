@@ -146,6 +146,7 @@
       <DependentUpon>TraceFlagUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TransformationStatsTracker.cs" />
+    <Compile Include="TreeNodeIconMapper.cs" />
     <Compile Include="TreeRenderStyle.cs" />
     <Compile Include="TreeVisualizer.cs" />
     <Compile Include="VerticalBalancedTreeVisualizer.cs" />
@@ -233,8 +234,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
+    <None Include="Icons\get.ico" />
+    <None Include="Resources\GetIcon.ico" />
     <None Include="Resources\MITLicense.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

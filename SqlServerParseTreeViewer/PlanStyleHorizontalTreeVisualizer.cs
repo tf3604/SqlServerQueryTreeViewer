@@ -27,8 +27,8 @@ namespace SqlServerParseTreeViewer
 {
     public class PlanStyleHorizontalTreeVisualizer : TreeVisualizer
     {
-        private const int _iconWidth = 25;
-        private const int _iconHeight = 25;
+        private const int _iconWidth = 32;
+        private const int _iconHeight = 32;
         private const int _interIconHorizontalSpacing = 50;
         private const int _interIconVerticalSpacing = 30;
         private const int _iconToTextSpacing = 5;
@@ -76,7 +76,14 @@ namespace SqlServerParseTreeViewer
                 graphics.FillRectangle(Brushes.White, 0, 0, width, height);
                 foreach (TreeNodeIcon icon in nodeIcons)
                 {
-                    graphics.DrawRectangle(Pens.Black, icon.IconRectangle);
+                    if (icon.Icon != null)
+                    {
+                        graphics.DrawIcon(icon.Icon, icon.IconRectangle);
+                    }
+                    else
+                    {
+                        graphics.DrawRectangle(Pens.Black, icon.IconRectangle);
+                    }
                     graphics.DrawString(icon.Text, _textFont, Brushes.Black, icon.TextRectangle);
 
                     // Draw connectors between icons
@@ -171,6 +178,7 @@ namespace SqlServerParseTreeViewer
             icon.Text = nodeText;
             icon.TextRectangle = new Rectangle(left + (icon.Width - (int)textSize.Width) / 2, top + _iconHeight + _iconToTextSpacing, (int)textSize.Width + 2, (int)textSize.Height + 2);
             icon.IconRectangle = new Rectangle(left + (icon.Width - _iconWidth) / 2, top, _iconWidth, _iconHeight);
+            icon.Icon = TreeNodeIconMapper.GetIconForNode(node);
 
             return icon;
         }

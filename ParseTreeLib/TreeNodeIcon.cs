@@ -74,6 +74,12 @@ namespace bkh.ParseTreeLib
             set;
         }
 
+        public Icon Icon
+        {
+            get;
+            set;
+        }
+
         public Rectangle IconRectangle
         {
             get;

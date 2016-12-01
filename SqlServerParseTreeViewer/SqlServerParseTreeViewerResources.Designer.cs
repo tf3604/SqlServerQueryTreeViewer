@@ -61,12 +61,19 @@ namespace SqlServerParseTreeViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-        ///documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation 
-        ///the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
-        ///and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon GetIcon {
+            get {
+                object obj = ResourceManager.GetObject("GetIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
         ///
-        ///The above copyright notice and this permission notice shall be include [rest of string was truncated]&quot;;.
+        ///The above copyright notice and this permission notice shall be included in a [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MITLicense {
             get {
