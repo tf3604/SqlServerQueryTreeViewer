@@ -63,9 +63,59 @@ namespace SqlServerParseTreeViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon FullOuterJoin {
+            get {
+                object obj = ResourceManager.GetObject("FullOuterJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon GetIcon {
             get {
                 object obj = ResourceManager.GetObject("GetIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon InnerJoinIcon {
+            get {
+                object obj = ResourceManager.GetObject("InnerJoinIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon LeftAntiSemiJoin {
+            get {
+                object obj = ResourceManager.GetObject("LeftAntiSemiJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon LeftOuterJoin {
+            get {
+                object obj = ResourceManager.GetObject("LeftOuterJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon LeftSemiJoin {
+            get {
+                object obj = ResourceManager.GetObject("LeftSemiJoin", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -78,6 +128,46 @@ namespace SqlServerParseTreeViewer {
         internal static string MITLicense {
             get {
                 return ResourceManager.GetString("MITLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon NaryJoin {
+            get {
+                object obj = ResourceManager.GetObject("NaryJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon RightAntiSemiJoin {
+            get {
+                object obj = ResourceManager.GetObject("RightAntiSemiJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon RightOuterJoin {
+            get {
+                object obj = ResourceManager.GetObject("RightOuterJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon RightSemiJoin {
+            get {
+                object obj = ResourceManager.GetObject("RightSemiJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

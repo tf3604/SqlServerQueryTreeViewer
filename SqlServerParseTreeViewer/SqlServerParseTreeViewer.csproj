@@ -210,6 +210,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Icons\get.ico" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -234,7 +235,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
-    <None Include="Icons\get.ico" />
+    <None Include="Icons\NaryJoin.ico" />
+    <None Include="Icons\RightSemiJoin.ico" />
+    <None Include="Icons\RightOuterJoin.ico" />
+    <None Include="Icons\RightAntiSemiJoin.ico" />
+    <None Include="Icons\LeftSemiJoin.ico" />
+    <None Include="Icons\LeftOuterJoin.ico" />
+    <None Include="Icons\LeftAntiSemiJoin.ico" />
+    <None Include="Icons\FullOuterJoin.ico" />
+    <Content Include="Icons\InnerJoin.ico" />
     <None Include="Resources\GetIcon.ico" />
     <None Include="Resources\MITLicense.txt" />
   </ItemGroup>

@@ -17,6 +17,9 @@ namespace SqlServerParseTreeViewer
                 case OperationType.LogOp_Get:
                     return SqlServerParseTreeViewerResources.GetIcon;
 
+                case OperationType.LogOp_Join:
+                    return SqlServerParseTreeViewerResources.InnerJoinIcon;
+
                 default:
                     return null;
             }
