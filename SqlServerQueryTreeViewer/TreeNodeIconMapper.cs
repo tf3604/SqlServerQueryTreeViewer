@@ -36,6 +36,24 @@ namespace SqlServerQueryTreeViewer
                 case OperationType.LogOp_Join:
                     return SqlServerQueryTreeViewerResources.InnerJoinIcon;
 
+                case OperationType.LogOp_LeftOuterJoin:
+                    return SqlServerQueryTreeViewerResources.LeftOuterJoin;
+
+                case OperationType.LogOp_RightOuterJoin:
+                    return SqlServerQueryTreeViewerResources.RightOuterJoin;
+
+                case OperationType.LogOp_LeftSemiJoin:
+                    return SqlServerQueryTreeViewerResources.LeftSemiJoin;
+
+                case OperationType.LogOp_LeftAntiSemiJoin:
+                    return SqlServerQueryTreeViewerResources.LeftAntiSemiJoin;
+
+                case OperationType.LogOp_RightSemiJoin:
+                    return SqlServerQueryTreeViewerResources.RightSemiJoin;
+
+                case OperationType.LogOp_RightAntiSemiJoin:
+                    return SqlServerQueryTreeViewerResources.RightAntiSemiJoin;
+
                 default:
                     return null;
             }
