@@ -172,6 +172,8 @@ namespace SqlServerQueryTreeViewer
             TreeNodeIcon icon = new TreeNodeIcon();
             icon.X = left;
             icon.Y = top;
+            icon.Left = left;
+            icon.Top = top;
             icon.Width = (int)Math.Max(_iconWidth, textSize.Width);
             icon.Height = _iconHeight + _iconToTextSpacing + (int)textSize.Height;
             icon.Node = node;

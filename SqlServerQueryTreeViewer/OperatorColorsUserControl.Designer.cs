@@ -50,6 +50,7 @@ namespace SqlServerQueryTreeViewer
             this.standardColorComboBox = new System.Windows.Forms.ColorComboBox();
             this.customColorButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.informationLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // operatorNameLabel
@@ -74,7 +75,7 @@ namespace SqlServerQueryTreeViewer
             // colorLabel
             // 
             this.colorLabel.AutoSize = true;
-            this.colorLabel.Location = new System.Drawing.Point(191, 4);
+            this.colorLabel.Location = new System.Drawing.Point(190, 58);
             this.colorLabel.Name = "colorLabel";
             this.colorLabel.Size = new System.Drawing.Size(34, 13);
             this.colorLabel.TabIndex = 2;
@@ -85,7 +86,7 @@ namespace SqlServerQueryTreeViewer
             this.standardColorComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.standardColorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.standardColorComboBox.FormattingEnabled = true;
-            this.standardColorComboBox.Location = new System.Drawing.Point(194, 21);
+            this.standardColorComboBox.Location = new System.Drawing.Point(193, 75);
             this.standardColorComboBox.Name = "standardColorComboBox";
             this.standardColorComboBox.Size = new System.Drawing.Size(155, 21);
             this.standardColorComboBox.TabIndex = 3;
@@ -93,7 +94,7 @@ namespace SqlServerQueryTreeViewer
             // 
             // customColorButton
             // 
-            this.customColorButton.Location = new System.Drawing.Point(356, 21);
+            this.customColorButton.Location = new System.Drawing.Point(355, 75);
             this.customColorButton.Name = "customColorButton";
             this.customColorButton.Size = new System.Drawing.Size(75, 23);
             this.customColorButton.TabIndex = 4;
@@ -103,7 +104,7 @@ namespace SqlServerQueryTreeViewer
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(194, 49);
+            this.deleteButton.Location = new System.Drawing.Point(193, 103);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 23);
             this.deleteButton.TabIndex = 5;
@@ -111,10 +112,21 @@ namespace SqlServerQueryTreeViewer
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
+            // informationLabel
+            // 
+            this.informationLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.informationLabel.Location = new System.Drawing.Point(193, 21);
+            this.informationLabel.Name = "informationLabel";
+            this.informationLabel.Size = new System.Drawing.Size(237, 37);
+            this.informationLabel.TabIndex = 6;
+            this.informationLabel.Text = "Set the colors used in the vertical balanced tree view.";
+            // 
             // OperatorColorsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.informationLabel);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.customColorButton);
             this.Controls.Add(this.standardColorComboBox);
@@ -137,5 +149,6 @@ namespace SqlServerQueryTreeViewer
         private System.Windows.Forms.ColorComboBox standardColorComboBox;
         private System.Windows.Forms.Button customColorButton;
         private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Label informationLabel;
     }
 }
