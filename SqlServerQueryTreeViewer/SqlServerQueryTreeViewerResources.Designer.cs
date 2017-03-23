@@ -63,6 +63,26 @@ namespace SqlServerQueryTreeViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon CompareEqual {
+            get {
+                object obj = ResourceManager.GetObject("CompareEqual", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Const {
+            get {
+                object obj = ResourceManager.GetObject("Const", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon FullOuterJoin {
             get {
                 object obj = ResourceManager.GetObject("FullOuterJoin", resourceCulture);
@@ -73,9 +93,9 @@ namespace SqlServerQueryTreeViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon GetIcon {
+        internal static System.Drawing.Icon Get {
             get {
-                object obj = ResourceManager.GetObject("GetIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Get", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -83,9 +103,19 @@ namespace SqlServerQueryTreeViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon InnerJoinIcon {
+        internal static System.Drawing.Icon Identifier {
             get {
-                object obj = ResourceManager.GetObject("InnerJoinIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Identifier", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon InnerJoin {
+            get {
+                object obj = ResourceManager.GetObject("InnerJoin", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -137,6 +167,16 @@ namespace SqlServerQueryTreeViewer {
         internal static System.Drawing.Icon NaryJoin {
             get {
                 object obj = ResourceManager.GetObject("NaryJoin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Project {
+            get {
+                object obj = ResourceManager.GetObject("Project", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

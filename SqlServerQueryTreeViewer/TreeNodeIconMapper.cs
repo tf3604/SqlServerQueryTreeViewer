@@ -31,10 +31,10 @@ namespace SqlServerQueryTreeViewer
             switch (node.Operation)
             {
                 case OperationType.LogOp_Get:
-                    return SqlServerQueryTreeViewerResources.GetIcon;
+                    return SqlServerQueryTreeViewerResources.Get;
 
                 case OperationType.LogOp_Join:
-                    return SqlServerQueryTreeViewerResources.InnerJoinIcon;
+                    return SqlServerQueryTreeViewerResources.InnerJoin;
 
                 case OperationType.LogOp_LeftOuterJoin:
                     return SqlServerQueryTreeViewerResources.LeftOuterJoin;
@@ -53,6 +53,25 @@ namespace SqlServerQueryTreeViewer
 
                 case OperationType.LogOp_RightAntiSemiJoin:
                     return SqlServerQueryTreeViewerResources.RightAntiSemiJoin;
+
+                case OperationType.LogOp_Project:
+                    return SqlServerQueryTreeViewerResources.Project;
+
+                case OperationType.ScaOp_Comp:
+                    switch (node.Arguments)
+                    {
+                        case "x_cmpEq":
+                            return SqlServerQueryTreeViewerResources.CompareEqual;
+
+                        default:
+                            return null;
+                    }
+
+                case OperationType.ScaOp_Const:
+                    return SqlServerQueryTreeViewerResources.Const;
+
+                case OperationType.ScaOp_Identifier:
+                    return SqlServerQueryTreeViewerResources.Identifier;
 
                 default:
                     return null;

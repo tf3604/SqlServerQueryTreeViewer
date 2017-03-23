@@ -235,6 +235,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
+    <None Include="Icons\Identifier.ico" />
+    <None Include="Icons\CompareEqual.ico" />
+    <Content Include="Icons\Const.ico" />
+    <Content Include="Icons\Project.ico" />
     <None Include="Icons\NaryJoin.ico" />
     <None Include="Icons\RightSemiJoin.ico" />
     <None Include="Icons\RightOuterJoin.ico" />
