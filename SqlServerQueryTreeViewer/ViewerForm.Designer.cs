@@ -222,7 +222,7 @@ namespace SqlServerQueryTreeViewer
             this.optionsToolStripMenuItem,
             this.showThumbnailToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // optionsToolStripMenuItem
@@ -366,7 +366,7 @@ namespace SqlServerQueryTreeViewer
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ViewerForm";
-            this.Text = "SQL Server Parse Tree Viewer";
+            this.Text = "SQL Server Query Tree Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewerForm_FormClosing);
             this.Load += new System.EventHandler(this.ViewerForm_Load);
             this.mainTabControl.ResumeLayout(false);
