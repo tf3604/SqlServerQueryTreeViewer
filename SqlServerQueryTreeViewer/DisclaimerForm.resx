@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="disclaimerLabel.Text" xml:space="preserve">
-    <value>SQL Server Query Tree Viewer is intended for use as an educational tool by visualizing SQL Server internal structures.  It should not be pointed at a production instance of SQL Server.  In fact, it really shouldn't even be pointed at a dev/test instance that will cause you pain if the instance crashes as a result of this tool.  You agree to assume all risk of using this tool.  That said, you are free to use this tool in any way that you see fit.</value>
+    <value>SQL Server Query Tree Viewer is intended for use as an educational tool by visualizing SQL Server internal structures.  Although we know of no problems caused by this tool, it is recommended that you NOT point it at a production instance of SQL Server.  You agree to assume all risk of using this tool.  That said, you are free to use this tool in any way that you see fit.  MIT License.</value>
   </data>
 </root>

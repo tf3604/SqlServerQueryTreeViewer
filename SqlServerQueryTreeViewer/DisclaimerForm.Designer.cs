@@ -70,11 +70,11 @@ namespace SqlServerQueryTreeViewer
             // 
             // dontAgreeButton
             // 
-            this.dontAgreeButton.Location = new System.Drawing.Point(114, 123);
+            this.dontAgreeButton.Location = new System.Drawing.Point(228, 123);
             this.dontAgreeButton.Name = "dontAgreeButton";
-            this.dontAgreeButton.Size = new System.Drawing.Size(302, 23);
+            this.dontAgreeButton.Size = new System.Drawing.Size(75, 23);
             this.dontAgreeButton.TabIndex = 2;
-            this.dontAgreeButton.Text = "I\'m sufficient frightened and I don\'t want to use this tool";
+            this.dontAgreeButton.Text = "Nope";
             this.dontAgreeButton.UseVisualStyleBackColor = true;
             this.dontAgreeButton.Click += new System.EventHandler(this.DontAgreeButton_Click);
             // 
