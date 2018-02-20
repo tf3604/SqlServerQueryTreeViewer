@@ -77,5 +77,34 @@ namespace SqlServerQueryTreeViewer
                     return null;
             }
         }
+
+        public static string ReportUnmappedOperators()
+        {
+            StringBuilder sb = new StringBuilder();
+            List<OperatorColor> operatorColors = ViewerSettings.Instance.OperatorColors.ToList();
+            foreach (OperatorColor operatorColor in operatorColors)
+            {
+                string operatorName = operatorColor.OperatorName;
+                OperationType operationType;
+                if (Enum.TryParse<OperationType>(operatorName, out operationType))
+                {
+                    SqlParseTreeNode node = new SqlParseTreeNode();
+                    node.Operation = operationType;
+                    Icon icon = GetIconForNode(node);
+                    if (icon == null)
+                    {
+                        sb.AppendFormat("Unmapped operator {0}", operatorName);
+                        sb.AppendLine();
+                    }
+                }
+                else
+                {
+                    sb.AppendFormat("Operator has no enum type: {0}", operatorName);
+                    sb.AppendLine();
+                }
+            }
+
+            return sb.ToString();
+        }
     }
 }
