@@ -24,9 +24,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SqlServerQueryTreeViewer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("tf3604.com/ssptv")]
+[assembly: AssemblyCompany("tf3604.com/ssqtv")]
 [assembly: AssemblyProduct("SqlServerQueryTreeViewer")]
-[assembly: AssemblyCopyright("Copyright © Brian Hansen 2016-2017")]
+[assembly: AssemblyCopyright("Copyright © Brian Hansen 2016-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
