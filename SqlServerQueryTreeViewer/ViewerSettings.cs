@@ -317,6 +317,11 @@ namespace SqlServerQueryTreeViewer
         [OnDeserialized]
         private void PostDeserialize(StreamingContext context)
         {
+            SetDefaultValues();
+        }
+
+        private void SetDefaultValues()
+        {
             if (_operatorColors == null)
             {
                 _operatorColors = new List<OperatorColor>();
@@ -346,7 +351,9 @@ namespace SqlServerQueryTreeViewer
             if (File.Exists(_xmlFileName) == false ||
                 _userSettingsOverwriteDecline == true)
             {
-                return new ViewerSettings();
+                ViewerSettings settings = new ViewerSettings();
+                settings.SetDefaultValues();
+                return settings;
             }
 
             try
@@ -379,7 +386,9 @@ namespace SqlServerQueryTreeViewer
                     Application.Exit();
                 }
 
-                return new ViewerSettings();
+                ViewerSettings settings = new ViewerSettings();
+                settings.SetDefaultValues();
+                return settings;
             }
         }
 
