@@ -73,72 +73,7 @@ namespace bkh.ParseTreeLib
 
         public override string ToString()
         {
-            if (OperationName == "LogOp_Get")
-            {
-                string tableName = ExtractTableNameAndAlias();
-                return $"Get {tableName}";
-            }
-
-            return OperationName;
-        }
-
-        private string ExtractTableNameAndAlias()
-        {
-            // Quick and dirty; probably has some cases where this isn't going to work
-            if (string.IsNullOrEmpty(Arguments))
-            {
-                return string.Empty;
-            }
-
-            string tableLabel = "TBL: ";
-            string aliasLabel = "alias TBL: ";
-
-            int tableLabelIndex = Arguments.IndexOf(tableLabel, StringComparison.InvariantCultureIgnoreCase);
-            if (tableLabelIndex < 0)
-            {
-                return string.Empty;
-            }
-
-            bool inEscape = false;
-            bool hasAlias = false;
-            int aliasStartIndex = 0;
-            StringBuilder sb = new StringBuilder();
-
-            for(int index = tableLabelIndex + tableLabel.Length; index < Arguments.Length; index++)
-            {
-                char c = Arguments[index];
-                if (c == '[')
-                {
-                    inEscape = true;
-                }
-                if (c == ']' && inEscape == true)
-                {
-                    inEscape = false;
-                }
-                if (c == ' ' && inEscape == false)
-                {
-                    break;
-                }
-                if (c == '(' && inEscape == false)
-                {
-                    if (Arguments.Substring(index + 1).StartsWith(aliasLabel, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        hasAlias = true;
-                        aliasStartIndex = index + aliasLabel.Length + 1;
-                    }
-                    break;
-                }
-                sb.Append(c);
-            }
-
-            if (hasAlias)
-            {
-                int closeParenIndex = Arguments.IndexOf(")", aliasStartIndex, StringComparison.InvariantCultureIgnoreCase);
-                string aliasName = Arguments.Substring(aliasStartIndex, closeParenIndex - aliasStartIndex);
-                sb.Append($" ({aliasName})");
-            }
-
-            return sb.ToString();
+            return TreeLabelGenerator.GetLabel(this);
         }
     }
 }

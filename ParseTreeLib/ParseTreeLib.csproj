@@ -60,6 +60,7 @@
     <Compile Include="MemoNodeIcon.cs" />
     <Compile Include="MemoTextParser.cs" />
     <Compile Include="NodeIcon.cs" />
+    <Compile Include="TreeLabelGenerator.cs" />
     <Compile Include="TreeNodeIcon.cs" />
     <Compile Include="OperationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
