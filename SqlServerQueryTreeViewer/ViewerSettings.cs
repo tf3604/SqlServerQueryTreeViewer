@@ -178,6 +178,13 @@ namespace SqlServerQueryTreeViewer
             set;
         }
 
+        [DataMember]
+        public bool? HideLowValueLeafLevelNodes
+        {
+            get;
+            set;
+        }
+
         public void Save()
         {
             if (_userSettingsOverwriteDecline == true)
@@ -343,6 +350,11 @@ namespace SqlServerQueryTreeViewer
                 {
                     TreeRenderStyle = TreeRenderStyle.PlanStyleHorizontalTree;
                 }
+            }
+
+            if (HideLowValueLeafLevelNodes == null)
+            {
+                HideLowValueLeafLevelNodes = true;
             }
         }
 

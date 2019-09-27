@@ -32,6 +32,7 @@
             this.planStyleHorizontalLabel = new System.Windows.Forms.Label();
             this.vertialBalancedTreeLabel = new System.Windows.Forms.Label();
             this.vertialBalancedTreeButton = new System.Windows.Forms.RadioButton();
+            this.hideLowLevelNodesCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // planStyleHorizontalButton
@@ -62,7 +63,7 @@
             // 
             this.vertialBalancedTreeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vertialBalancedTreeLabel.Location = new System.Drawing.Point(25, 103);
+            this.vertialBalancedTreeLabel.Location = new System.Drawing.Point(25, 144);
             this.vertialBalancedTreeLabel.Name = "vertialBalancedTreeLabel";
             this.vertialBalancedTreeLabel.Size = new System.Drawing.Size(403, 38);
             this.vertialBalancedTreeLabel.TabIndex = 3;
@@ -73,7 +74,7 @@
             // 
             this.vertialBalancedTreeButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vertialBalancedTreeButton.Location = new System.Drawing.Point(3, 70);
+            this.vertialBalancedTreeButton.Location = new System.Drawing.Point(3, 111);
             this.vertialBalancedTreeButton.Name = "vertialBalancedTreeButton";
             this.vertialBalancedTreeButton.Size = new System.Drawing.Size(438, 26);
             this.vertialBalancedTreeButton.TabIndex = 2;
@@ -82,10 +83,22 @@
             this.vertialBalancedTreeButton.UseVisualStyleBackColor = true;
             this.vertialBalancedTreeButton.CheckedChanged += new System.EventHandler(this.VertialBalancedTreeButton_CheckedChanged);
             // 
+            // hideLowLevelNodesCheckBox
+            // 
+            this.hideLowLevelNodesCheckBox.AutoSize = true;
+            this.hideLowLevelNodesCheckBox.Location = new System.Drawing.Point(29, 79);
+            this.hideLowLevelNodesCheckBox.Name = "hideLowLevelNodesCheckBox";
+            this.hideLowLevelNodesCheckBox.Size = new System.Drawing.Size(173, 17);
+            this.hideLowLevelNodesCheckBox.TabIndex = 4;
+            this.hideLowLevelNodesCheckBox.Text = "Hide low-value leaf-level nodes";
+            this.hideLowLevelNodesCheckBox.UseVisualStyleBackColor = true;
+            this.hideLowLevelNodesCheckBox.CheckedChanged += new System.EventHandler(this.HideLowLevelNodesCheckBox_CheckedChanged);
+            // 
             // RenderStyleUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.hideLowLevelNodesCheckBox);
             this.Controls.Add(this.vertialBalancedTreeLabel);
             this.Controls.Add(this.vertialBalancedTreeButton);
             this.Controls.Add(this.planStyleHorizontalLabel);
@@ -94,6 +107,7 @@
             this.Size = new System.Drawing.Size(445, 243);
             this.Load += new System.EventHandler(this.RenderStyleUserControl_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -103,5 +117,6 @@
         private System.Windows.Forms.Label planStyleHorizontalLabel;
         private System.Windows.Forms.Label vertialBalancedTreeLabel;
         private System.Windows.Forms.RadioButton vertialBalancedTreeButton;
+        private System.Windows.Forms.CheckBox hideLowLevelNodesCheckBox;
     }
 }

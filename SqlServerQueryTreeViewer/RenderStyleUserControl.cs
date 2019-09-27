@@ -27,6 +27,9 @@ namespace SqlServerQueryTreeViewer
             {
                 planStyleHorizontalButton.Checked = true;
             }
+
+            hideLowLevelNodesCheckBox.Checked =
+                ViewerSettings.Clone.HideLowValueLeafLevelNodes == null ? true : ViewerSettings.Clone.HideLowValueLeafLevelNodes.Value;
         }
 
         private void PlanStyleHorizontalButton_CheckedChanged(object sender, EventArgs e)
@@ -43,6 +46,11 @@ namespace SqlServerQueryTreeViewer
             {
                 ViewerSettings.Clone.TreeRenderStyle = TreeRenderStyle.VerticalBalancedTree;
             }
+        }
+
+        private void HideLowLevelNodesCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ViewerSettings.Clone.HideLowValueLeafLevelNodes = hideLowLevelNodesCheckBox.Checked;
         }
     }
 }
