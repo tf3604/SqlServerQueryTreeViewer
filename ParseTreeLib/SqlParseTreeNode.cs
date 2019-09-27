@@ -71,6 +71,27 @@ namespace bkh.ParseTreeLib
             private set;
         }
 
+        public static SqlParseTreeNode Clone(SqlParseTreeNode original, SqlParseTreeNode newParent = null)
+        {
+            if (original == null)
+            {
+                return null;
+            }
+
+            SqlParseTreeNode node = new SqlParseTreeNode();
+
+            node.SequenceNumber = original.SequenceNumber;
+            node.Level = original.Level;
+            node.OperationName = original.OperationName;
+            node.Arguments = original.Arguments;
+            node.Operation = original.Operation;
+            node.Parent = newParent;
+            node.Children = new List<SqlParseTreeNode>();
+            original.Children.ForEach(n => node.Children.Add(SqlParseTreeNode.Clone(n, node)));
+
+            return node;
+        }
+
         public override string ToString()
         {
             return TreeLabelGenerator.GetLabel(this);

@@ -53,6 +53,11 @@ namespace SqlServerQueryTreeViewer
                 throw new ArgumentNullException(nameof(tree));
             }
 
+            if (ViewerSettings.Instance.HideLowValueLeafLevelNodes.Value == true)
+            {
+                tree = TreeSimplifier.RemoveLowValueLeafLevelNodes(tree);
+            }
+
             using (Bitmap dummyBitmap = new Bitmap(1, 1))
             {
                 _dummyGraphics = Graphics.FromImage(dummyBitmap);

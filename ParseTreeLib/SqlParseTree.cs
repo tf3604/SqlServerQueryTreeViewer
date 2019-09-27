@@ -63,6 +63,25 @@ namespace bkh.ParseTreeLib
             set;
         }
 
+        public static SqlParseTree Clone(SqlParseTree original)
+        {
+            if (original == null)
+            {
+                return null;
+            }
+
+            SqlParseTree tree = new SqlParseTree();
+
+            tree.TreeDescription = original.TreeDescription;
+            tree.RootNode = SqlParseTreeNode.Clone(original.RootNode);
+            tree.OuterTreeText = original.OuterTreeText;
+            tree.InnerTreeText = original.InnerTreeText;
+            tree.BeginOffset = original.BeginOffset;
+            tree.EndOffset = original.EndOffset;
+
+            return tree;
+        }
+
         public void MeasureTree(out int maxDepth, out int maxWidth)
         {
             Dictionary<int, int> levelCounts = new Dictionary<int, int>();
