@@ -1,4 +1,4 @@
-﻿//  Copyright(c) 2016-2019-2017 Brian Hansen.
+﻿//  Copyright(c) 2016-2022-2017 Breanna Hansen.
 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 //  documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("tf3604.com/ssqtv")]
 [assembly: AssemblyProduct("SqlServerQueryTreeViewer")]
-[assembly: AssemblyCopyright("Copyright © Brian Hansen 2016-2019")]
+[assembly: AssemblyCopyright("Copyright © Breanna Hansen 2016-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
